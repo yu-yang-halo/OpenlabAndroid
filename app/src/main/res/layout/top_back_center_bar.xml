@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:orientation="vertical"
-    android:background="#f00d31a1">
+    android:background="@color/theme_color">
 
     <TextView
         android:id="@+id/tv_tbb_title"

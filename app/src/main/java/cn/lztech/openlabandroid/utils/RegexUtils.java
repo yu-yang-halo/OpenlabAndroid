@@ -54,4 +54,14 @@ public class RegexUtils {
         Matcher m = p.matcher(password);
         return m.matches();
     }
+    public static boolean isVaildLoginName(String name){
+        /**
+         * 判断登录名是否有效
+         */
+        String rexp="^[@A-Za-z0-9!#$%^&*.~]{5,22}$";
+
+        Pattern p = Pattern.compile(rexp);
+        Matcher m = p.matcher(name);
+        return m.matches();
+    }
 }

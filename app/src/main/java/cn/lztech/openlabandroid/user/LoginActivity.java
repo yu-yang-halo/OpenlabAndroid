@@ -15,12 +15,18 @@ import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import cn.elnet.andrmb.elconnector.WSConnector;
 import cn.elnet.andrmb.elconnector.WSException;
 import cn.elnet.andrmb.elconnector.util.MD5Generator;
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 import cn.lztech.openlabandroid.MainActivity;
 import cn.lztech.openlabandroid.R;
 import cn.lztech.openlabandroid.cache.ContentBox;
+import cn.lztech.openlabandroid.fir.FirManagerService;
 
 public class LoginActivity extends FragmentActivity {
     Button regBtn;
@@ -28,6 +34,18 @@ public class LoginActivity extends FragmentActivity {
     EditText usernameEdit;
     EditText passwordEdit;
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        JPushInterface.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JPushInterface.onPause(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +85,8 @@ public class LoginActivity extends FragmentActivity {
 
         usernameEdit.setText(ContentBox.getValueString(this, ContentBox.KEY_USERNAME, ""));
         passwordEdit.setText(ContentBox.getValueString(this, ContentBox.KEY_PASSWORD, ""));
+
+        FirManagerService.checkUpdate(this);
 
     }
 
@@ -126,15 +146,27 @@ public class LoginActivity extends FragmentActivity {
         protected void onPostExecute(String result) {
             progressHUD.dismiss();
             if(result==null){
+                String userId=WSConnector.getInstance().getUserMap().get("userId");
+                Set<String> tags=new HashSet<String>();
+
+                tags.add(userId);
+
+                JPushInterface.setAliasAndTags(getApplicationContext(), null, tags, new TagAliasCallback() {
+                    @Override
+                    public void gotResult(int i, String s, Set<String> set) {
+                       //Toast.makeText(LoginActivity.this,s,Toast.LENGTH_SHORT).show();
+                    }
+                });
                 ContentBox.loadString(ctx,ContentBox.KEY_USERNAME,loginName);
-                ContentBox.loadString(ctx,ContentBox.KEY_USERNAME,password);
-                Toast.makeText(ctx,"success",Toast.LENGTH_SHORT).show();
-            }else{
-                Toast.makeText(ctx,result,Toast.LENGTH_SHORT).show();
+                ContentBox.loadString(ctx,ContentBox.KEY_PASSWORD,password);
                 Intent intent=new Intent(LoginActivity.this,MainActivity.class);
                 startActivity(intent);
+            }else{
+                Toast.makeText(ctx,result,Toast.LENGTH_SHORT).show();
             }
         }
 
     }
+
+
 }

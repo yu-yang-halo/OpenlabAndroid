@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:id="@+id/relativeLayout"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -37,7 +37,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginLeft="40dp"
             android:background="@null"
-            android:hint="手机号"
+            android:hint="请使用学生卡号"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
     </RelativeLayout>
@@ -168,8 +168,47 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_below="@+id/relativeLayout4"
+        android:background="@drawable/line_style"></LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/relativeLayout4"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="26dp"
+        android:id="@+id/relativeLayout5">
+
+        <TextView
+            android:layout_width="95dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="手机号"
+            android:id="@+id/textView5"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:id="@+id/phoneEditText"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/textView5"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="40dp"
+            android:background="@null"
+            android:hint="请认真填写"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@+id/relativeLayout5"
         android:background="@drawable/line_style"
-        android:id="@+id/linearLayout"></LinearLayout>
+        android:id="@+id/linearLayout2"></LinearLayout>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -178,10 +217,10 @@
         android:background="@drawable/button_shape_blue"
         android:textColor="#ffffff"
         android:id="@+id/registerBtn"
-        android:layout_marginTop="40dp"
-        android:layout_below="@+id/linearLayout"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/linearLayout2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>

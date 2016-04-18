@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 
+import java.io.UnsupportedEncodingException;
+
 import cn.elnet.andrmb.bean.UserType;
 import cn.elnet.andrmb.elconnector.WSConnector;
 import cn.elnet.andrmb.elconnector.WSException;
@@ -27,6 +29,7 @@ public class RegisterActivity extends FragmentActivity {
     EditText  passEdit;
     EditText  repassEdit;
     EditText  realNameEdit;
+    EditText  phoneEditText;
 
     Button  registerBtn;
     @Override
@@ -40,6 +43,7 @@ public class RegisterActivity extends FragmentActivity {
         passEdit= (EditText) findViewById(R.id.passEditText);
         repassEdit= (EditText) findViewById(R.id.repassEditText);
         realNameEdit= (EditText) findViewById(R.id.realNameEditText);
+        phoneEditText= (EditText) findViewById(R.id.phoneEditText);
         registerBtn= (Button) findViewById(R.id.registerBtn);
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
@@ -49,21 +53,25 @@ public class RegisterActivity extends FragmentActivity {
                 String pass=passEdit.getText().toString();
                 String repass=repassEdit.getText().toString();
                 String realName=realNameEdit.getText().toString();
+                String phone=phoneEditText.getText().toString();
 
                 if(name.trim().equals("")
                         ||pass.trim().equals("")
                         ||repass.trim().equals("")
-                        ||realName.trim().equals("")){
+                        ||realName.trim().equals("")
+                        ||phone.trim().equals("")){
                     Toast.makeText(RegisterActivity.this,"内容不能为空",Toast.LENGTH_SHORT).show();
-                }else if(!RegexUtils.isMobileNO(name)){
-                    Toast.makeText(RegisterActivity.this,"请使用手机号注册",Toast.LENGTH_SHORT).show();
+                }else if(!RegexUtils.isVaildLoginName(name)){
+                    Toast.makeText(RegisterActivity.this,"请输入正确的学生卡号",Toast.LENGTH_SHORT).show();
+                }else if(!RegexUtils.isMobileNO(phone)){
+                    Toast.makeText(RegisterActivity.this,"请输入正确的手机号",Toast.LENGTH_SHORT).show();
                 }else if(!RegexUtils.isVaildPass(pass)){
                     Toast.makeText(RegisterActivity.this,"密码由6-22位的数字、字符组成",Toast.LENGTH_SHORT).show();
                 }else if(!pass.equals(repass)){
                     Toast.makeText(RegisterActivity.this,"两次输入密码不一致",Toast.LENGTH_SHORT).show();
                 }else{
 
-                    UserType userType=new UserType(0,name,pass,realName,name,null,null,null);
+                    UserType userType=new UserType(0,name,pass,realName,phone,null,null,null,null);
                     userType.setUserRole("student");
 
                     new RegisterTask(RegisterActivity.this,userType).execute();
@@ -112,6 +120,8 @@ public class RegisterActivity extends FragmentActivity {
                 WSConnector.getInstance().createUser(userType);
             } catch (WSException e) {
                 return e.getErrorMsg();
+            } catch (UnsupportedEncodingException e) {
+                return e.getMessage();
             }
             return null;
         }

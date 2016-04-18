@@ -11,7 +11,7 @@ public class ContentBox {
 	public static final String KEY_USERNAME="key_username";
 	public static final String KEY_PASSWORD="key_password";
 
-
+	public static final String KEY_REALNAME="key_realname";
 	
 	public static void loadString(Context ctx, String key,String value) {
          sp=ctx.getSharedPreferences(SharePreference_name, Context.MODE_PRIVATE);
