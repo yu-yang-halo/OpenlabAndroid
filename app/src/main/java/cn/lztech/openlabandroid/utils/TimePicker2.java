@@ -153,12 +153,12 @@ public class TimePicker2 extends WheelPicker {
         }
         hourView.setItems(hours, selectedHour);
         ArrayList<String> minutes = new ArrayList<String>();
-//        for (int i = 0; i < 60; i++) {
-//
-//            minutes.add(DateUtils.fillZero(i));
-//        }
-        minutes.add(DateUtils.fillZero(0));
-        minutes.add(DateUtils.fillZero(30));
+        for (int i = 0; i < 60; i++) {
+            if(i%10==0){
+                minutes.add(DateUtils.fillZero(i));
+            }
+        }
+
 
         minuteView.setItems(minutes, selectedMinute);
         hourView.setOnWheelViewListener(new WheelView.OnWheelViewListener() {

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#eeeeee"
+    android:id="@+id/mainRelativeLayout"
     android:scrollbars="none">
     <FrameLayout
         android:id="@+id/currentPageFragment"

@@ -1,6 +1,9 @@
 package cn.lztech.openlabandroid.fragment;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -61,8 +64,9 @@ public class OrderClassFragment extends IOrderStatusFragment implements MainActi
 
         myOrderAdapter=new MyOrderAdapter(getActivity(),type);
         listView.setAdapter(myOrderAdapter);
-        listView.setDividerHeight(20);
 
+        listView.setDivider(new ColorDrawable(Color.LTGRAY));
+        listView.setDividerHeight(15);
 
         // listen refresh event
         swipeRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {

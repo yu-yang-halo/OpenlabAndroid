@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:descendantFocusability="blocksDescendants">
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="120dp"
+      android:padding="5dp">
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textAppearance="?android:attr/textAppearanceMedium"
+          android:text="我的作业"
+          android:id="@+id/aNameView"
+          android:textColor="@color/black_40"
+          android:layout_alignParentTop="true"
+          android:layout_alignParentLeft="true"
+          android:layout_alignParentStart="true" />
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textAppearance="?android:attr/textAppearanceSmall"
+          android:text="待完成"
+          android:textColor="#a0ff0000"
+          android:id="@+id/aStatusView"
+          android:layout_alignParentBottom="true"
+          android:layout_marginBottom="5dp"
+          android:layout_alignParentRight="true"
+          android:layout_alignParentEnd="true" />
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textAppearance="?android:attr/textAppearanceMedium"
+          android:text="课程名称:"
+          android:textColor="@color/black_40"
+          android:id="@+id/textView12"
+          android:layout_centerVertical="true"
+          android:layout_alignParentLeft="true"
+          android:layout_alignParentStart="true" />
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textAppearance="?android:attr/textAppearanceMedium"
+          android:text="逾期时间："
+          android:textColor="@color/black_40"
+          android:id="@+id/textView14"
+          android:layout_alignBottom="@+id/aStatusView"
+          android:layout_alignParentLeft="true"
+          android:layout_alignParentStart="true" />
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textAppearance="?android:attr/textAppearanceMedium"
+          android:text="人工智能实验"
+          android:id="@+id/courseName"
+          android:textColor="@color/black_40"
+          android:layout_centerVertical="true"
+          android:layout_toLeftOf="@+id/aStatusView"
+          android:layout_toRightOf="@+id/textView14"
+          android:layout_toEndOf="@+id/textView14" />
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textAppearance="?android:attr/textAppearanceMedium"
+          android:text="2016-01-01"
+          android:textColor="@color/black_40"
+          android:id="@+id/dueDate"
+          android:layout_alignBottom="@+id/textView14"
+          android:layout_toRightOf="@+id/textView14"
+          android:layout_toEndOf="@+id/textView14" />
+
+      <Button
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text=""
+          android:background="@drawable/icon_arrow"
+          android:id="@+id/button7"
+          android:layout_centerVertical="true"
+          android:layout_alignParentRight="true"
+          android:layout_alignParentEnd="true" />
+
+  </RelativeLayout>
+</RelativeLayout>

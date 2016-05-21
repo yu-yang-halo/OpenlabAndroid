@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/r1">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="您还没有作业"
-        android:id="@+id/textView12"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="您还没有作业"
+            android:id="@+id/emptyDescView"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+        <com.baoyz.widget.PullRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/assignmentListView">
+
+            </ListView>
+
+
+        </com.baoyz.widget.PullRefreshLayout>
+
+    </RelativeLayout>
+
+
 </RelativeLayout>

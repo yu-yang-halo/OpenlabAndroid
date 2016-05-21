@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
 
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,11 +51,12 @@ public class MainActivity extends FragmentActivity {
     private ActionBar mActionbar;
 	private TextView tvTitle;
 	Button leftBtn;
+	public RelativeLayout mainRelativeLayout;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-
+		mainRelativeLayout= (RelativeLayout) findViewById(R.id.mainRelativeLayout);
 
 		initCustomActionBar();
 

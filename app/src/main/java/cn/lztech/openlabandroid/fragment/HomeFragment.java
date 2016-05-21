@@ -110,7 +110,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onCheckedChanged(MaterialRadioGroup group, int checkedId) {
                 checkID = checkedId;
-                if (checkedId == 1) {
+                if (checkID == 1) {
                     Toast.makeText(getActivity(), "一般预约", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getActivity(), "临时预约", Toast.LENGTH_SHORT).show();

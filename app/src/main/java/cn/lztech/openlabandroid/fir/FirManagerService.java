@@ -47,7 +47,7 @@ public class FirManagerService {
                         Log.i("fir", "版本号一致,无需更新");
                     } else {
 
-                            new AlertDialog.Builder(ctx, AlertDialog.THEME_HOLO_LIGHT)
+                            new AlertDialog.Builder(ctx)
                                     .setTitle("提示")
                                     .setMessage("发现新版本~")
                                     .setPositiveButton("立即更新", new DialogInterface.OnClickListener() {
