@@ -58,6 +58,11 @@ public class LoginActivity extends FragmentActivity {
         usernameEdit= (EditText) findViewById(R.id.userNameEditText);
         passwordEdit= (EditText) findViewById(R.id.passwordEditText);
 
+        TextView versionTV= (TextView) findViewById(R.id.textView16);
+
+
+        versionTV.setText("v"+FirManagerService.getVersionInfo(this).versionName);
+
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override

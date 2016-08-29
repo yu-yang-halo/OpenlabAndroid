@@ -20,12 +20,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ListView
+            <ExpandableListView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/assignmentListView">
 
-            </ListView>
+
+            </ExpandableListView>
 
 
         </com.baoyz.widget.PullRefreshLayout>

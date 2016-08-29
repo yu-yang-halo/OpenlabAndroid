@@ -3,6 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="10dp"
     android:orientation="vertical">
 
 
@@ -11,10 +12,14 @@
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/button_shape_blue"
+        android:textColor="@color/white"
         android:text="拍照"/>
     <Button
         android:layout_below="@+id/button0"
         android:id="@+id/button1"
+        android:background="@drawable/button_shape_blue"
+        android:textColor="@color/white"
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,6 +28,8 @@
     <Button
         android:layout_below="@+id/button1"
         android:id="@+id/button2"
+        android:background="@drawable/button_shape_blue"
+        android:textColor="@color/white"
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

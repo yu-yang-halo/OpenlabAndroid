@@ -104,12 +104,14 @@
 
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_alignParentBottom="true"
         android:gravity="center_horizontal"
-        android:padding="5dp">
+        android:padding="5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/linearLayout3">
         <Button
             android:layout_width="80dp"
             android:layout_height="40dp"
@@ -125,4 +127,15 @@
             android:layout_height="2dp"
             android:background="@drawable/line_style"/>
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text=""
+        android:textColor="#80000000"
+        android:id="@+id/textView16"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/loginBtn"
+        android:layout_alignEnd="@+id/loginBtn" />
 </RelativeLayout>

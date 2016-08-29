@@ -104,15 +104,19 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        materialRadioGroup= (MaterialRadioGroup) view.findViewById(R.id.view);
+        materialRadioGroup= (MaterialRadioGroup) view.findViewById(R.id.groupRadio);
+
 
         materialRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(MaterialRadioGroup group, int checkedId) {
-                checkID = checkedId;
-                if (checkID == 1) {
+
+                System.out.println("checkedId : "+checkedId);
+                if (checkedId ==R.id.normal ) {
+                    checkID = 1;
                     Toast.makeText(getActivity(), "一般预约", Toast.LENGTH_SHORT).show();
                 } else {
+                    checkID = 2;
                     Toast.makeText(getActivity(), "临时预约", Toast.LENGTH_SHORT).show();
                 }
                 paramsReset();

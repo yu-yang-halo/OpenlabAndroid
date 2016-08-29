@@ -17,6 +17,11 @@ import android.graphics.drawable.Drawable;
 import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
+import java.io.DataInput;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -84,7 +89,7 @@ public class ImageUtils {
             final int widthRate = Math.round((float) width / (float) w);
             inSampleSize = heightRate < widthRate ? heightRate : widthRate;
         }
-
+        System.out.println("inSampleSize is "+inSampleSize+" height:"+height +" width:"+width+" h:"+h+" w:"+w);
         return inSampleSize;
     }
 
@@ -96,7 +101,7 @@ public class ImageUtils {
         // 设置为ture只获取图片大小
         opts.inJustDecodeBounds = true;
         opts.inPreferredConfig = Bitmap.Config.ALPHA_8;
-        opts.inSampleSize = getScaleSize(opts,w,h);
+        opts.inSampleSize =1;
         // 加载到内存
         opts.inJustDecodeBounds = false;
 
@@ -108,7 +113,15 @@ public class ImageUtils {
             if (responseCode==HttpURLConnection.HTTP_OK){
                 InputStream stream=httpConnection.getInputStream();
                 Bitmap bitmap=BitmapFactory.decodeStream(stream,null,opts);
-                return bitmap;
+                if(bitmap==null){
+                    return null;
+                }
+
+                if(bitmap.getHeight()<h||bitmap.getWidth()<w){
+                    return bitmap;
+                }
+
+                return  createScaledBitmap(bitmap,w,h,ScalingLogic.FIT);
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -120,6 +133,52 @@ public class ImageUtils {
 
         return null;
     }
+    public static Bitmap createScaledBitmap(Bitmap unscaledBitmap, int dstWidth, int dstHeight, ScalingLogic scalingLogic) {
+        Rect srcRect = calculateSrcRect(unscaledBitmap.getWidth(), unscaledBitmap.getHeight(), dstWidth, dstHeight, scalingLogic);
+        Rect dstRect = calculateDstRect(unscaledBitmap.getWidth(), unscaledBitmap.getHeight(), dstWidth, dstHeight, scalingLogic);
+        Bitmap scaledBitmap = Bitmap.createBitmap(dstRect.width(), dstRect.height(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(scaledBitmap);
+        canvas.drawBitmap(unscaledBitmap, srcRect, dstRect, new Paint(Paint.FILTER_BITMAP_FLAG));
+        return scaledBitmap;
+
+    }
+
+    public static Rect calculateSrcRect(int srcWidth, int srcHeight, int dstWidth, int dstHeight, ScalingLogic scalingLogic) {
+        if (scalingLogic == ScalingLogic.CROP) {
+            final float srcAspect = (float)srcWidth / (float)srcHeight;
+            final float dstAspect = (float)dstWidth / (float)dstHeight;
+            if (srcAspect > dstAspect) {
+                final int srcRectWidth = (int)(srcHeight * dstAspect);
+                final int srcRectLeft = (srcWidth - srcRectWidth) / 2;
+                return new Rect(srcRectLeft, 0, srcRectLeft + srcRectWidth, srcHeight);
+            } else {
+                final int srcRectHeight = (int)(srcWidth / dstAspect);
+                final int scrRectTop = (int)(srcHeight - srcRectHeight) / 2;
+                return new Rect(0, scrRectTop, srcWidth, scrRectTop + srcRectHeight);
+            }
+        } else {
+            return new Rect(0, 0, srcWidth, srcHeight);
+        }
+    }
+    public static Rect calculateDstRect(int srcWidth, int srcHeight, int dstWidth, int dstHeight, ScalingLogic scalingLogic) {
+        if (scalingLogic == ScalingLogic.FIT) {
+            final float srcAspect = (float)srcWidth / (float)srcHeight;
+            final float dstAspect = (float)dstWidth / (float)dstHeight;
+            if (srcAspect > dstAspect) {
+                return new Rect(0, 0, dstWidth, (int)(dstWidth / srcAspect));
+            } else {
+                return new Rect(0, 0, (int)(dstHeight * srcAspect), dstHeight);
+            }
+        } else {
+            return new Rect(0, 0, dstWidth, dstHeight);
+        }
+    }
+
+    enum  ScalingLogic{
+        FIT,CROP;
+    }
+
+
     public static  Bitmap convertNetToBitmap(String urlString){
         URL url= null;
         URLConnection connection= null;
@@ -185,6 +244,37 @@ public class ImageUtils {
         System.out.println("image base64 length=" + base64ImageString.length());
        return  Base64.encodeToString(bitmap2Bytes(bm),Base64.DEFAULT);
     }
+
+    public static String fileToString(String filePath){
+        InputStream is= null;
+        byte[] buffer = null;
+        try {
+            is = new FileInputStream(filePath);
+            System.out.println("Size:"+is.available()/(1024*1024.0)+"MB");
+            buffer=new byte[is.available()];
+
+            is.read(buffer);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        //base64 encode
+        byte[] encode = Base64.encode(buffer,Base64.DEFAULT);
+        String encodeString = new String(encode);
+
+        return encodeString;
+
+    }
+
+
     public static byte[] bitmap2Bytes(Bitmap bm) {
          ByteArrayOutputStream baos = new ByteArrayOutputStream();
          bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
@@ -277,4 +367,6 @@ public class ImageUtils {
                 matrix, true);
         return new BitmapDrawable(newbmp);
     }
+
+
 }

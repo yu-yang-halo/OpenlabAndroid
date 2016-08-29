@@ -66,7 +66,7 @@ public class OrderClassFragment extends IOrderStatusFragment implements MainActi
         listView.setAdapter(myOrderAdapter);
 
         listView.setDivider(new ColorDrawable(Color.LTGRAY));
-        listView.setDividerHeight(15);
+        listView.setDividerHeight(2);
 
         // listen refresh event
         swipeRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {

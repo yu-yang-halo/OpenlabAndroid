@@ -1,23 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="vertical"
+   >
 
     <RelativeLayout
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:background="#ffffff"
+        android:descendantFocusability="blocksDescendants"
         >
+
         <ImageView
             android:id="@+id/layoutImageView"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
             android:padding="2dp"
+            android:scaleType="fitXY"
             android:src="@drawable/icon_addpic"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             xmlns:android="http://schemas.android.com/apk/res/android" />
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/delBtn"
+            android:layout_toRightOf="@+id/layoutImageView"
+            android:layout_marginLeft="-20dp"
+            android:layout_marginTop="0dp"
+            android:background="@mipmap/del"
+            />
     </RelativeLayout>
 
 

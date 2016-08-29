@@ -10,6 +10,23 @@ public class TimeUtils {
      public static void main(String[] args) {
 
 	 }
+	public static String formatDueDate(String timeStr,String format2){
+
+		String format = "yyyy-MM-dd'+'HH:mm";
+		SimpleDateFormat sdf = new SimpleDateFormat(format);
+		SimpleDateFormat sdf2 = new SimpleDateFormat(format2);
+		try {
+			Date time = sdf.parse(timeStr);
+
+			return sdf2.format(time);
+
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		return "";
+	}
 	public static String formatString(String timeStr,String format2){
 		String format = "yyyy-MM-dd'T'HH:mm:ss.SSS+08:00";
 		SimpleDateFormat sdf = new SimpleDateFormat(format);

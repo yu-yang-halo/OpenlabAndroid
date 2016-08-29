@@ -45,7 +45,12 @@
             android:screenOrientation="portrait">
 
         </activity>
+        <activity android:name=".PhotoPreviewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            >
 
+        </activity>
 
         <!-- Rich push 核心功能 since 2.0.6-->
         <activity
