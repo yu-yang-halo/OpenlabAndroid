@@ -15,8 +15,10 @@ import android.widget.Toast;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 
 import cn.qqtheme.framework.picker.DatePicker;
 import cn.qqtheme.framework.picker.OptionPicker;
@@ -117,6 +119,17 @@ public class DatePicker2 extends WheelPicker {
             years.add(String.valueOf(i));
         }
     }
+    private Date startDate=TimeUtils.getDate("2008-10-01 00:00:00", "yyyy-MM-dd HH:mm:ss");
+    private Date endDate=TimeUtils.getDate("2050-10-01 00:00:00", "yyyy-MM-dd HH:mm:ss");
+
+    public void setDateRange(Date startDate, Date endDate) {
+
+        this.startDate=startDate;
+        this.endDate=endDate;
+
+    }
+
+
 
     private int findItemIndex(ArrayList<String> items, int item) {
         //折半查找有序元素的索引
@@ -182,7 +195,7 @@ public class DatePicker2 extends WheelPicker {
         LinearLayout layout = new LinearLayout(activity);
         layout.setOrientation(LinearLayout.HORIZONTAL);
         layout.setGravity(Gravity.CENTER);
-        WheelView yearView = new WheelView(activity);
+        final WheelView yearView = new WheelView(activity);
         yearView.setLayoutParams(new LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT));
         yearView.setTextSize(textSize);
         yearView.setTextColor(textColorNormal, textColorFocus);
@@ -198,7 +211,7 @@ public class DatePicker2 extends WheelPicker {
             yearTextView.setText(yearLabel);
         }
         layout.addView(yearTextView);
-        WheelView monthView = new WheelView(activity);
+        final WheelView monthView = new WheelView(activity);
         monthView.setLayoutParams(new LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT));
         monthView.setTextSize(textSize);
         monthView.setTextColor(textColorNormal, textColorFocus);
@@ -250,6 +263,9 @@ public class DatePicker2 extends WheelPicker {
                 @Override
                 public void onSelected(boolean isUserScroll, int selectedIndex, String item) {
                     selectedYearIndex = selectedIndex;
+
+
+
                     //需要根据年份及月份动态计算天数
                     days.clear();
                     int maxDays = DateUtils.calculateDaysInMonth(stringToYearMonthDay(item), stringToYearMonthDay(months.get(selectedMonthIndex)));
@@ -261,6 +277,9 @@ public class DatePicker2 extends WheelPicker {
                         selectedDayIndex = days.size() - 1;
                     }
                     dayView.setItems(days, selectedDayIndex);
+
+
+
                 }
             });
         }
@@ -276,6 +295,10 @@ public class DatePicker2 extends WheelPicker {
             @Override
             public void onSelected(boolean isUserScroll, int selectedIndex, String item) {
                 selectedMonthIndex = selectedIndex;
+
+
+
+
                 if (mode != YEAR_MONTH) {
                     //年月日或年月模式下，需要根据年份及月份动态计算天数
                     days.clear();
@@ -288,6 +311,7 @@ public class DatePicker2 extends WheelPicker {
                         selectedDayIndex = days.size() - 1;
                     }
                     dayView.setItems(days, selectedDayIndex);
+
                 }
             }
         });
@@ -304,10 +328,74 @@ public class DatePicker2 extends WheelPicker {
                 @Override
                 public void onSelected(boolean isUserScroll, int selectedIndex, String item) {
                     selectedDayIndex = selectedIndex;
+                    verfyDateView(yearView,monthView,dayView,"day listenser");
                 }
             });
         }
         return layout;
+    }
+
+    private void verfyDateView(WheelView yearView,WheelView monthView,WheelView dayView,String loc){
+        Log.v("verfyDateView","selectedYearIndex :"+selectedYearIndex
+                +" selectedMonthIndex:"+selectedMonthIndex
+                +" selectedDayIndex:"+selectedDayIndex+" loc:"+loc);
+        int year=Integer.parseInt(years.get(selectedYearIndex));
+        Calendar calendar=Calendar.getInstance();
+        calendar.set(year,selectedMonthIndex,selectedDayIndex+1);
+        Date currentDate=calendar.getTime();
+
+        if(currentDate.compareTo(startDate)<0){
+            //当前日期小于最小日期值 取最小日期值
+            calendar.setTime(startDate);
+            selectedYearIndex=findYearsIndex(calendar.get(Calendar.YEAR));
+            selectedMonthIndex=calendar.get(Calendar.MONTH);
+            selectedDayIndex=calendar.get(Calendar.DAY_OF_MONTH)-1;
+            if(yearView!=null){
+                yearView.setItems(years,selectedYearIndex);
+            }
+            if(monthView!=null){
+                monthView.setItems(months,selectedMonthIndex);
+            }
+            if(dayView!=null){
+                dayView.setItems(days, selectedDayIndex);
+            }
+
+
+        }
+
+        if(currentDate.compareTo(endDate)>0){
+            //当前日期大于最大日期值 取最大日期值
+            calendar.setTime(endDate);
+            selectedYearIndex=findYearsIndex(calendar.get(Calendar.YEAR));
+            selectedMonthIndex=calendar.get(Calendar.MONTH);
+            selectedDayIndex=calendar.get(Calendar.DAY_OF_MONTH)-1;
+
+
+            if(yearView!=null){
+                yearView.setItems(years,selectedYearIndex);
+            }
+            if(monthView!=null){
+                monthView.setItems(months,selectedMonthIndex);
+            }
+            if(dayView!=null){
+                dayView.setItems(days, selectedDayIndex);
+            }
+
+
+        }
+
+    }
+
+    private int findYearsIndex(int year){
+        int index=0;
+        for (int i=0;i<years.size();i++){
+            if(years.get(i).equals(""+year)){
+                index=i;
+                break;
+            }
+        }
+
+        return index;
     }
 
     private int stringToYearMonthDay(String text) {

@@ -24,6 +24,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.SocketImpl;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -32,6 +33,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -50,6 +52,8 @@ import cn.elnet.andrmb.bean.DeskInfo;
 import cn.elnet.andrmb.bean.LabInfoType;
 import cn.elnet.andrmb.bean.ReportInfo;
 import cn.elnet.andrmb.bean.ReservationType;
+import cn.elnet.andrmb.bean.ScoreType;
+import cn.elnet.andrmb.bean.SemesterType;
 import cn.elnet.andrmb.bean.UserType;
 import cn.elnet.andrmb.elconnector.util.Logger;
 import org.w3c.dom.DOMException;
@@ -74,7 +78,7 @@ import javax.xml.parsers.ParserConfigurationException;
 public class WSConnector {
 	private static String openlabUrl = "";
 	private static String authapiUrl = "";
-	private static String IP1 = "202.38.78.70";//202.38.78.70
+	private static String IP1 = "192.168.2.151";//202.38.78.70
 	private static String portStr = "8080";
 	private static final String REQUEST_HEAD = "http://";
 	private static WSConnector instance = new WSConnector();
@@ -84,9 +88,9 @@ public class WSConnector {
 	private WSConnector() {
 		this.userMap = new LinkedHashMap<String, String>();
 		openlabUrl = REQUEST_HEAD + IP1 + ":" + portStr
-				+ "/elws/services/openlab/";
+				+ "/elws2/services/openlab/";
 		authapiUrl = REQUEST_HEAD + IP1 + ":" + portStr
-				+ "/elws/services/authapi/";
+				+ "/elws2/services/authapi/";//authapi  openauth
 	}
 
 	public Map<String, String> getUserMap() {
@@ -112,7 +116,7 @@ public class WSConnector {
 		return instance;
 	}
 	public String getWebImageURL(String imageName){
-		return "http://"+IP1+"/openlabweb/upload/"+imageName;
+		return "http://"+IP1+":8080/labdoc/upload/"+imageName;
 	}
 
 	private InputStream request(String service) throws WSException {
@@ -300,6 +304,60 @@ public class WSConnector {
 		return null;
 	}
 
+	/**
+	 *  短信验证码
+	 * @param
+	 * @return
+	 * @throws WSException
+     */
+	public boolean sendShortMsgCode(String key,int type) throws WSException {
+		String service = WSConnector.authapiUrl + "sendShortMsgCode?senderId=1&secToken=1&key="+key+"&type="+type;
+		Logger.getLogger(this.getClass()).info("sendShortMsgCode URL" + service);
+		Element root = getXMLNode(service);
+		if (root == null) {
+			throw new WSException(ErrorCode.REJECT);
+		}
+		Element errCodeNode = root.getElementsByTagName("errorCode") != null ? (Element) root
+				.getElementsByTagName("errorCode").item(0) : null;
+
+
+		if (errCodeNode != null) {
+			int errorCode = Integer.parseInt(errCodeNode.getFirstChild()
+					.getNodeValue());
+			if (errorCode == ErrorCode.ACCEPT.getCode()) {
+				return true;
+			}
+		}
+		return false;
+
+	}
+	public boolean verificationCode(String key,String code) throws WSException {
+		String service = WSConnector.authapiUrl + "verificationCode?senderId=1&secToken=1&key="+key
+				         +"&code="+code;
+
+		Logger.getLogger(this.getClass()).info("verificationCode URL" + service);
+		Element root = getXMLNode(service);
+		if (root == null) {
+			throw new WSException(ErrorCode.REJECT);
+		}
+		Element errCodeNode = root.getElementsByTagName("errorCode") != null ? (Element) root
+				.getElementsByTagName("errorCode").item(0) : null;
+
+
+		if (errCodeNode != null) {
+			int errorCode = Integer.parseInt(errCodeNode.getFirstChild()
+					.getNodeValue());
+			if (errorCode == ErrorCode.ACCEPT.getCode()) {
+				return true;
+
+			}
+		}
+
+		return false;
+
+
+	}
+
 	/*
 	 * ***********************************************************
 	 * Openlab webservice 最新版本的接口 * * * authapi openlab
@@ -307,6 +365,150 @@ public class WSConnector {
 	 */
 
 	// openlab 接口部分
+
+	private String parseElementValueNoNull(Element node){
+		String value=parseElementValue(node);
+
+		return value==null?"":value;
+	}
+	private int parseElementValueToInt(Element node){
+		String value=parseElementValue(node);
+
+		return value==null?-1:Integer.parseInt(value);
+	}
+	private short parseElementValueToShort(Element node){
+		String value=parseElementValue(node);
+
+		return value==null?-1:Short.parseShort(value);
+	}
+	private float parseElementValueToFloat(Element node){
+		String value=parseElementValue(node);
+
+		return value==null?-1:Float.parseFloat(value);
+	}
+
+	private String parseElementValue(Element node){
+
+		if(node==null){
+			return null;
+		}
+		if(node.getFirstChild()==null){
+			return null;
+		}
+
+		if(node.getFirstChild().getNodeValue()==null){
+			return null;
+		}
+
+		return node.getFirstChild().getNodeValue();
+
+	}
+
+	public boolean  checkResvPeriod(int labId,int weekDay,int startHr,int startMin,int endHr,int endMin) throws WSException {
+
+		String service = WSConnector.openlabUrl + "checkResvPeriod?senderId="
+				+ this.userMap.get("userId") + "&secToken="
+				+ this.userMap.get("secToken") + "&labId=" +labId+"&weekDay="+weekDay
+				+"&startHr="+startHr+"&startMin="+startMin+"&endHr="+endHr+"&endMin="+endMin;
+
+		Logger.getLogger(this.getClass()).info("checkResvPeriod URL" + service);
+		Element root = getXMLNode(service);
+		if (root == null) {
+			throw new WSException(ErrorCode.REJECT);
+		}
+		Element errCodeNode = root.getElementsByTagName("errorCode") != null ? (Element) root
+				.getElementsByTagName("errorCode").item(0) : null;
+
+
+		if (errCodeNode != null) {
+			int errorCode = Integer.parseInt(errCodeNode.getFirstChild()
+					.getNodeValue());
+			if (errorCode == ErrorCode.ACCEPT.getCode()) {
+
+				Element conflictNode = root.getElementsByTagName("conflict") != null ? (Element) root
+						.getElementsByTagName("conflict").item(0) : null;
+
+				if("false".equals(parseElementValueNoNull(conflictNode))){
+					return true;
+				}else{
+					Element startHrNode = root.getElementsByTagName("startHr") != null ? (Element) root
+							.getElementsByTagName("startHr").item(0) : null;
+					Element startMinNode = root.getElementsByTagName("startMin") != null ? (Element) root
+							.getElementsByTagName("startMin").item(0) : null;
+					Element endHrNode = root.getElementsByTagName("endHr") != null ? (Element) root
+							.getElementsByTagName("endHr").item(0) : null;
+					Element endMinNode = root.getElementsByTagName("endMin") != null ? (Element) root
+							.getElementsByTagName("endMin").item(0) : null;
+
+
+					String shr=parseElementValueNoNull(startHrNode);
+					String shm=parseElementValueNoNull(startMinNode);
+					String ehr=parseElementValueNoNull(endHrNode);
+					String ehm=parseElementValueNoNull(endMinNode);
+
+
+
+					if (listener != null) {
+						listener.handleMessage("对不起,当天的时间段"+shr+":"+shm+"-"+ehr+":"+ehm+"无法预约");
+					}
+
+					return false;
+
+
+				}
+
+
+
+
+			}
+		}
+
+
+
+		return false;
+
+	}
+
+	//arr -> [year,semester] error->[-1,-1]
+	public int[] getCurrentSemester() throws WSException {
+
+		String service = WSConnector.openlabUrl + "getCurrentSemester?senderId="
+				+ this.userMap.get("userId") + "&secToken="
+				+ this.userMap.get("secToken");
+
+		Logger.getLogger(this.getClass()).info("getCurrentSemester URL" + service);
+		Element root = getXMLNode(service);
+		if (root == null) {
+			throw new WSException(ErrorCode.REJECT);
+		}
+		Element errCodeNode = root.getElementsByTagName("errorCode") != null ? (Element) root
+				.getElementsByTagName("errorCode").item(0) : null;
+
+
+		if (errCodeNode != null) {
+			int errorCode = Integer.parseInt(errCodeNode.getFirstChild()
+					.getNodeValue());
+			if (errorCode == ErrorCode.ACCEPT.getCode()) {
+				Element yearNode = root.getElementsByTagName("year") != null ? (Element) root
+						.getElementsByTagName("year").item(0) : null;
+				Element semesterNode = root.getElementsByTagName("semester") != null ? (Element) root
+						.getElementsByTagName("semester").item(0) : null;
+
+
+				int currentYear=parseElementValueToInt(yearNode);
+				int currentSemester=parseElementValueToInt(semesterNode);
+
+				return new int[]{currentYear,currentSemester};
+
+			}
+		}
+
+
+		return new int[]{-1,-1};
+
+	}
+
+
 
 	public List<LabInfoType> getLabListByIncDesk(boolean incDesk)
 			throws WSException {
@@ -321,8 +523,7 @@ public class WSConnector {
 		}
 		Element errCodeNode = root.getElementsByTagName("errorCode") != null ? (Element) root
 				.getElementsByTagName("errorCode").item(0) : null;
-		Element errMsgNode = root.getElementsByTagName("errorMsg") != null ? (Element) root
-				.getElementsByTagName("errorMsg").item(0) : null;
+
 
 		if (errCodeNode != null) {
 			int errorCode = Integer.parseInt(errCodeNode.getFirstChild()
@@ -349,20 +550,18 @@ public class WSConnector {
 						Element roomNode = (Element) child
 								.getElementsByTagName("room").item(0);
 
-						int labId = Integer.parseInt(labIdNode.getFirstChild()
-								.getNodeValue());
-						String name = nameNode.getFirstChild() == null ? ""
-								: nameNode.getFirstChild().getNodeValue();
-						String desc = descNode.getFirstChild() == null ? ""
-								: descNode.getFirstChild().getNodeValue();
-						int numOfDesk = Integer.parseInt(numOfDeskNode
-								.getFirstChild().getNodeValue());
-						String building = buildingNode.getFirstChild() == null ? ""
-								: buildingNode.getFirstChild().getNodeValue();
-						short floor = Short.parseShort(floorNode
-								.getFirstChild().getNodeValue());
-						short room = Short.parseShort(roomNode.getFirstChild()
-								.getNodeValue());
+						int labId = parseElementValueToInt(labIdNode);
+						String name = parseElementValueNoNull(nameNode);
+
+						String desc = parseElementValueNoNull(descNode);
+
+						int numOfDesk =parseElementValueToInt(numOfDeskNode);
+						String building = parseElementValueNoNull(buildingNode);
+						short floor =parseElementValueToShort(floorNode);
+
+						short room = parseElementValueToShort(roomNode);
+
+
 						LabInfoType labInfo = new LabInfoType(labId, name,
 								desc, numOfDesk, building, floor, room);
 						if (incDesk) {
@@ -387,15 +586,12 @@ public class WSConnector {
 									Element descNode2 = (Element) child2
 											.getElementsByTagName("desc").item(
 													0);
-									int deskNum = Integer.parseInt(deskNumNode
-											.getFirstChild().getNodeValue());
-									int labId2 = Integer.parseInt(labIdNode2
-											.getFirstChild().getNodeValue());
-									int type = Integer.parseInt(typeNode
-											.getFirstChild().getNodeValue());
-									String desc2 = descNode2.getFirstChild() == null ? ""
-											: descNode2.getFirstChild()
-													.getNodeValue();
+									int deskNum = parseElementValueToInt(deskNumNode);
+									int labId2 = parseElementValueToInt(labIdNode2);
+									int type = parseElementValueToInt(typeNode);
+
+									String desc2 =parseElementValueNoNull(descNode2);
+
 
 									DeskInfo deskInfo = new DeskInfo(deskNum,
 											labId2, type, desc2);
@@ -432,10 +628,12 @@ public class WSConnector {
 	/**
 	 *  获取当前用户课程列表
 	 */
-	public List<CourseType> getLabCourseList() throws WSException {
+	public List<CourseType> getLabCourseList(String currentYear,String seme) throws WSException {
+
 		String service = WSConnector.openlabUrl
 				+ "getLabCourseList?senderId=" + this.userMap.get("userId")
-				+ "&secToken=" + this.userMap.get("secToken")+"&year=1&semester=1";
+				+ "&secToken=" + this.userMap.get("secToken")+"&userId="
+				+ this.userMap.get("userId")+"&year="+currentYear+"&semester="+seme+"&userType=0";
 
 
 		Logger.getLogger(this.getClass()).info(
@@ -495,6 +693,58 @@ public class WSConnector {
         return null;
 	}
 
+
+	public List<SemesterType>  getSemesterList() throws WSException {
+		List<SemesterType> semesterTypes=new ArrayList<SemesterType>();
+
+		String service = WSConnector.openlabUrl + "getSemesterList?senderId=1&secToken=1";
+		Element root = getXMLNode(service);
+		if (root == null) {
+			throw new WSException(ErrorCode.REJECT);
+		}
+
+		Element errCodeNode = root.getElementsByTagName("errorCode") != null ? (Element) root
+				.getElementsByTagName("errorCode").item(0) : null;
+
+		if (errCodeNode != null) {
+			int errorCode = Integer.parseInt(errCodeNode.getFirstChild()
+					.getNodeValue());
+			if (errorCode == ErrorCode.ACCEPT.getCode()) {
+				NodeList nodeList=root.getElementsByTagName("semester");
+				if (nodeList != null && nodeList.getLength() > 0) {
+					for (int i = 0; i < nodeList.getLength(); i++) {
+						Element child = (Element) nodeList.item(i);
+						Element yearNode = (Element) child
+								.getElementsByTagName("year").item(0);
+						Element semesterNode = (Element) child
+								.getElementsByTagName("semester").item(0);
+
+						if(yearNode==null||semesterNode==null){
+							continue;
+						}
+
+						int  semester = Integer.parseInt(semesterNode.getFirstChild().getNodeValue());
+						int  year = Integer.parseInt(yearNode.getFirstChild().getNodeValue());
+
+						semesterTypes.add(new SemesterType(year,semester));
+
+					}
+
+				    return semesterTypes;
+				}
+			} else {
+				throw new WSException(ErrorCode.get(errorCode));
+			}
+		}
+
+		return null;
+
+	}
+
+
+	/**
+	 * 更新作业
+	 */
 	public int AddOrUpdAssignment(int asId, String courseCode, String desc,
 			String dueDate) throws WSException {
 		String service = WSConnector.openlabUrl
@@ -651,6 +901,78 @@ public class WSConnector {
 
 	}
 
+	public ScoreType getStudentScoreList(String courseCode) throws WSException {
+		String service = WSConnector.openlabUrl
+				+ "getStudentScoreList?senderId=" + this.userMap.get("userId")
+				+ "&secToken=" + this.userMap.get("secToken")
+				+ "&userId=" + this.userMap.get("userId")
+				+ "&courseCode="+courseCode;
+
+		int userId=this.userMap.get("userId")==null?-1:Integer.parseInt(this.userMap.get("userId"));
+
+		Logger.getLogger(this.getClass()).info(
+				"getReservationList URL" + service);
+		Element root = getXMLNode(service);
+		if (root == null) {
+			throw new WSException(ErrorCode.REJECT);
+		}
+
+		Element errCodeNode = root.getElementsByTagName("errorCode") != null ? (Element) root
+				.getElementsByTagName("errorCode").item(0) : null;
+
+
+		if (errCodeNode != null) {
+			int errorCode = Integer.parseInt(errCodeNode.getFirstChild()
+					.getNodeValue());
+			if (errorCode == ErrorCode.ACCEPT.getCode()) {
+
+				List<ScoreType> scoreList = new ArrayList<ScoreType>();
+
+				NodeList scoreListNodes = root
+						.getElementsByTagName("scoreList");
+				if (scoreListNodes != null
+						&& scoreListNodes.getLength() > 0) {
+					for (int i = 0; i < scoreListNodes.getLength(); i++) {
+						Element child = (Element) scoreListNodes.item(i);
+						Element studentIdNode = (Element) child
+								.getElementsByTagName("studentId").item(0);
+						Element courseCodeNode = (Element) child
+								.getElementsByTagName("courseCode").item(0);
+						Element scoreNode = (Element) child
+								.getElementsByTagName("score").item(0);
+						Element commentNode = (Element) child
+								.getElementsByTagName("comment").item(0);
+						Element statusNode = (Element) child
+								.getElementsByTagName("status").item(0);
+
+
+
+						int studentId=parseElementValueToInt(studentIdNode);
+						if(userId!=studentId){
+							continue;
+						}
+						String comment=parseElementValueNoNull(commentNode);
+						short status=parseElementValueToShort(statusNode);
+						float score=parseElementValueToFloat(scoreNode);
+
+						ScoreType scoreType=new ScoreType(studentId,courseCode,score, comment,status);
+
+						scoreList.add(scoreType);
+
+					}
+				}
+				System.out.println("scoreList===="+scoreList);
+				if(scoreList.size()==1){
+
+					return scoreList.get(0);
+				}
+
+				return null;
+			}
+		}
+		return null;
+	}
+
 	public List<ReservationType> getReservationList(String name)
 			throws WSException {
 		String service = WSConnector.openlabUrl
@@ -722,6 +1044,8 @@ public class WSConnector {
 						reservationTypes.add(reservationType);
 
 					}
+
+					reservationTypeTimeSort(reservationTypes);
 					return reservationTypes;
 				}
 
@@ -731,6 +1055,27 @@ public class WSConnector {
 		}
 		return null;
 	}
+
+	private void assignmentTypeTimeSort(List<AssignmentType> assignmentTypes){
+		Collections.sort(assignmentTypes, new Comparator<AssignmentType>() {
+			@Override
+			public int compare(AssignmentType lhs, AssignmentType rhs) {
+
+				return rhs.getDueDate().compareTo(lhs.getDueDate());
+			}
+		});
+	}
+	private void reservationTypeTimeSort(List<ReservationType> reservationTypes){
+		Collections.sort(reservationTypes, new Comparator<ReservationType>() {
+			@Override
+			public int compare(ReservationType lhs, ReservationType rhs) {
+
+				return rhs.getStartTime().compareTo(lhs.getStartTime());
+			}
+		});
+	}
+
+
 
 	public AssignmentReportTurple getAassignmentList(String courseCode)
 			throws WSException {
@@ -783,6 +1128,8 @@ public class WSConnector {
 						Element createdByNode = (Element) child
 								.getElementsByTagName("createdBy").item(0);
 
+
+
 						int id = Integer.parseInt(idNode.getFirstChild()
 								.getNodeValue());
 						int createdBy = Integer.parseInt(createdByNode
@@ -798,8 +1145,10 @@ public class WSConnector {
 						AssignmentType assignmentType = new AssignmentType(id,
 								courseCode, desc, dueDate, createdTime,
 								createdBy);
+
 						assignmentTypes.add(assignmentType);
 					}
+					assignmentTypeTimeSort(assignmentTypes);
 					turple.setAssignmentTypeList(assignmentTypes);
 				}
 
@@ -822,22 +1171,48 @@ public class WSConnector {
 						Element submitTimeNode = (Element) child
 								.getElementsByTagName("submitTime").item(0);
 
-						int reportId = Integer.parseInt(reportIdNode.getFirstChild()
-								.getNodeValue());
-						int userId = Integer.parseInt(userIdNode
-								.getFirstChild().getNodeValue());
-						int assignmentId = Integer.parseInt(assignmentIdNode
-								.getFirstChild().getNodeValue());
-						courseCode = courseCodeNode.getFirstChild()
-								.getNodeValue();
+						Element scoreNode = (Element) child
+								.getElementsByTagName("score").item(0);
+						Element scoreCommentNode = (Element) child
+								.getElementsByTagName("scoreComment").item(0);
+						Element givenByNode = (Element) child
+								.getElementsByTagName("givenBy").item(0);
+						Element givenTimeNode = (Element) child
+								.getElementsByTagName("givenTime").item(0);
+						Element statusNode = (Element) child
+								.getElementsByTagName("status").item(0);
 
-						String description = descriptionNode.getFirstChild()!=null?descriptionNode.getFirstChild()
-								.getNodeValue():"";
-						String fileName = fileNameNode.getFirstChild()
-								.getNodeValue();
-						String submitTime = submitTimeNode.getFirstChild()
-								.getNodeValue();
-						ReportInfo reportInfo=new ReportInfo(reportId,userId,assignmentId,courseCode,description,fileName,submitTime);
+
+
+						int reportId = parseElementValueToInt(reportIdNode);
+						int userId =parseElementValueToInt(userIdNode);
+						int assignmentId = parseElementValueToInt(assignmentIdNode);
+						courseCode =parseElementValueNoNull(courseCodeNode);
+
+
+
+						String description = parseElementValueNoNull(descriptionNode);
+
+						try {
+							description= URLDecoder.decode(description,"UTF-8");
+						} catch (UnsupportedEncodingException e) {
+							//
+						}
+
+						String fileName =parseElementValueNoNull(fileNameNode);
+						String submitTime = parseElementValueNoNull(submitTimeNode);
+						float score=parseElementValueToFloat(scoreNode);
+						String scoreComment=parseElementValueNoNull(scoreCommentNode);
+						int givenBy=parseElementValueToInt(givenByNode);
+						String givenTime=parseElementValueNoNull(givenTimeNode);
+						short status=parseElementValueToShort(statusNode);
+
+
+
+
+						ReportInfo reportInfo=new ReportInfo(reportId,userId,assignmentId,courseCode,
+								description,fileName,submitTime,score,scoreComment,givenBy,
+						givenTime,status);
 
 						reportInfos.add(reportInfo);
 					}
@@ -994,18 +1369,15 @@ public class WSConnector {
 								.getElementsByTagName("cardId").item(0) : null;
 						int userId = -1;
 						String cardId = "", name = "", password = "", realName = "", phone = "", email = "", lastSecToken = "", lastLoginTime = "";
-						userId = Integer.parseInt(userIdNode.getFirstChild()
-								.getNodeValue());
-						cardId =cardIdNode==null?"":cardIdNode.getFirstChild().getNodeValue();
-						name =nameNode==null?"":nameNode.getFirstChild().getNodeValue();
-						password = passwordNode==null?"":passwordNode.getFirstChild().getNodeValue();
-						realName =realNameNode==null?"": realNameNode.getFirstChild().getNodeValue();
-						phone =phoneNode==null?"": phoneNode.getFirstChild().getNodeValue();
-						email = emailNode==null?"":emailNode.getFirstChild().getNodeValue();
-						lastSecToken =lastSecTokenNode==null?"": lastSecTokenNode.getFirstChild()
-								.getNodeValue();
-						lastLoginTime =lastLoginTimeNode==null?"": lastLoginTimeNode.getFirstChild()
-								.getNodeValue();
+						userId = parseElementValueToInt(userIdNode);
+						cardId =parseElementValueNoNull(cardIdNode);
+						name =parseElementValueNoNull(nameNode);
+						password = parseElementValueNoNull(passwordNode);
+						realName =parseElementValueNoNull(realNameNode);
+						phone =parseElementValueNoNull(phoneNode);
+						email = parseElementValueNoNull(emailNode);
+						lastSecToken =parseElementValueNoNull(lastSecTokenNode);
+						lastLoginTime =parseElementValueNoNull(lastLoginTimeNode);
 
 						UserType user = new UserType(userId, name, password,
 								realName, phone, email, lastSecToken,
@@ -1049,6 +1421,41 @@ public class WSConnector {
 			}
 		}
 
+		return false;
+
+	}
+
+	public boolean updateUser(String loginName,String phone,String pwd,String vcode) throws WSException {
+		String userId=this.userMap.get("userId")==null?"0":this.userMap.get("userId");
+		String secToken=this.userMap.get("secToken")==null?"0":this.userMap.get("secToken");
+
+		String service = WSConnector.authapiUrl + "updateUser?senderId="+userId
+				+"&secToken="+secToken
+				+"&userId="+userId+"&password="+ MD5Generator.reverseMD5Value(pwd);
+		if(vcode!=null&&loginName!=null&&phone!=null){
+			service+="&name="
+					+ loginName
+					+"&vCode="+vcode+"&phone="+phone;
+		}
+
+
+		Logger.getLogger(this.getClass()).info("createUser URL" + service);
+		Element root = getXMLNode(service);
+		if (root == null) {
+			throw new WSException(ErrorCode.REJECT);
+		}
+		Element errCodeNode = root.getElementsByTagName("errorCode") != null ? (Element) root
+				.getElementsByTagName("errorCode").item(0) : null;
+
+		if (errCodeNode != null) {
+			int errorCode = Integer.parseInt(errCodeNode.getFirstChild()
+					.getNodeValue());
+			if (errorCode == ErrorCode.ACCEPT.getCode()) {
+				return true;
+			} else {
+				throw new WSException(ErrorCode.get(errorCode));
+			}
+		}
 		return false;
 
 	}

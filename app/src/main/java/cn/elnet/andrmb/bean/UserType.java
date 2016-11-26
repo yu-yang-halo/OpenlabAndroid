@@ -10,6 +10,17 @@ public class UserType {
 	private String lastSecToken;
 	private String lastLoginTime;
 	private String cardId;
+
+	public String getVcode() {
+		return vcode;
+	}
+
+	public void setVcode(String vcode) {
+		this.vcode = vcode;
+	}
+
+	private String vcode;
+
 	
 	
 	public String getCardId() {

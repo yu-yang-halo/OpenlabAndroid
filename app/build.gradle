@@ -8,8 +8,8 @@ android {
         applicationId "cn.lztech.openlabandroid"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 14
-        versionName "1.0.8"
+        versionCode 21
+        versionName "1.1.8"
     }
     buildTypes {
         release {
@@ -21,6 +21,12 @@ android {
         main {
             jniLibs.srcDirs = ['libs']
         }
+    }
+}
+
+allprojects {
+    repositories {
+        maven { url "https://jitpack.io" }
     }
 }
 
@@ -45,6 +51,8 @@ dependencies {
     compile 'com.android.support:design:23.1.1'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.github.zzz40500:AndroidSweetSheet:1.1.0'
+    compile 'com.github.dongjunkun:DropDownMenu:1.0.3'
+    compile 'com.jakewharton:butterknife:6.1.0'
     compile files('libs/gson-2.1.jar')
     compile files('libs/volley.jar')
 }

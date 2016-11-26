@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import cn.elnet.andrmb.elconnector.ErrorCode;
 import cn.elnet.andrmb.elconnector.WSConnector;
+import cn.elnet.andrmb.elconnector.WSException;
 import cn.elnet.andrmb.elconnector.util.IWSErrorCodeListener;
 import cn.jpush.android.api.BasicPushNotificationBuilder;
 import cn.jpush.android.api.CustomPushNotificationBuilder;
@@ -30,6 +31,19 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    System.err.println("Semester"+WSConnector.getInstance().getSemesterList());
+                } catch (WSException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+
 
         FIR.init(this);
 
@@ -87,6 +101,16 @@ public class MyApplication extends Application {
                 msg.what=errorCode.getCode();
                 myHandler.sendMessage(msg);
             }
+
+            @Override
+            public void handleMessage(String message) {
+                Message msg=new Message();
+                msg.what=999999;
+                Bundle bundle=new Bundle();
+                bundle.putString("message",message);
+                msg.setData(bundle);
+                myHandler.sendMessage(msg);
+            }
         });
     }
 
@@ -108,6 +132,9 @@ public class MyApplication extends Application {
 
                             }
                         }).show();
+            }else if(msg.what==999999){
+                String message=msg.getData().getString("message");
+                Toast.makeText(currentActivity,message,Toast.LENGTH_LONG).show();
             }
         }
     };

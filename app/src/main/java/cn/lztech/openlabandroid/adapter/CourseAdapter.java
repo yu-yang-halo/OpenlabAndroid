@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
@@ -13,6 +14,7 @@ import java.util.List;
 import cn.elnet.andrmb.bean.AssignmentType;
 import cn.elnet.andrmb.bean.CourseType;
 import cn.elnet.andrmb.bean.ReportInfo;
+import cn.elnet.andrmb.bean.ScoreType;
 import cn.lztech.openlabandroid.R;
 import cn.lztech.openlabandroid.fragment.AssignmentFragment;
 import cn.lztech.openlabandroid.utils.TimeUtils;
@@ -48,8 +50,10 @@ public class CourseAdapter extends BaseExpandableListAdapter {
         if(courseTypes==null||courseTypes.get(groupPosition).getAssignmentTypes()==null){
             return 0;
         }
+        int size=courseTypes.get(groupPosition).getAssignmentTypes().size();
 
-        return courseTypes.get(groupPosition).getAssignmentTypes().size();
+
+        return size;
 
 
     }
@@ -92,6 +96,8 @@ public class CourseAdapter extends BaseExpandableListAdapter {
         titleView.setText(courseTypes.get(groupPosition).getName());
 
 
+
+
         return convertView;
     }
 
@@ -99,6 +105,12 @@ public class CourseAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
         List<AssignmentType> assignmentTypes=courseTypes.get(groupPosition).getAssignmentTypes();
+
+        ScoreType scoreType=courseTypes.get(groupPosition).getScoreType();
+
+
+
+
         AssigmentHolder holder;
         if(convertView==null){
             convertView= LayoutInflater.from(ctx).inflate(R.layout.adapter_assigment,null);
@@ -108,26 +120,77 @@ public class CourseAdapter extends BaseExpandableListAdapter {
             holder.statusView= (TextView) convertView.findViewById(R.id.aStatusView);
             holder.dueDate= (TextView) convertView.findViewById(R.id.dueDate);
             holder.courseName= (TextView) convertView.findViewById(R.id.courseName);
+            holder.relativeLayoutScore= (RelativeLayout) convertView.findViewById(R.id.relativeLayoutScore);
+            holder.scoreText= (TextView) convertView.findViewById(R.id.scoreText);
+            holder.assignmentScoreTxt= (TextView) convertView.findViewById(R.id.assignmentScoreTxt);
+
+
             convertView.setTag(holder);
 
         }
 
         holder= (AssigmentHolder) convertView.getTag();
 
-        holder.nameView.setText(assignmentTypes.get(childPosition).getDesc());
-        holder.courseName.setText(assignmentTypes.get(childPosition).getCourseCode());
-        String dueDateStr=TimeUtils.formatDueDate(assignmentTypes.get(childPosition).getDueDate(),"yyyy-MM-dd HH:mm");
-        holder.dueDate.setText(dueDateStr);
-
-
-        if(isHasReport(groupPosition,assignmentTypes.get(childPosition).getId())){
-            holder.statusView.setText("已上传报告");
+        if(scoreType==null){
+            holder.relativeLayoutScore.setVisibility(View.GONE);
         }else{
-            holder.statusView.setText("未上传报告");
+            if(childPosition==0){
+                holder.relativeLayoutScore.setVisibility(View.VISIBLE);
+            }else{
+                holder.relativeLayoutScore.setVisibility(View.GONE);
+            }
+
+
+            holder.scoreText.setText("你的成绩为:"+scoreType.getScore());
         }
 
 
+
+        holder.nameView.setText(assignmentTypes.get(childPosition).getDesc());
+        holder.courseName.setText(assignmentTypes.get(childPosition).getCourseCode());
+        String dueDateStr=TimeUtils.formatString(assignmentTypes.get(childPosition).getDueDate(),"yyyy-MM-dd HH:mm");
+
+
+
+        ReportInfo report=findReport(groupPosition,assignmentTypes.get(childPosition).getId());
+
+
+        if(report!=null){
+            holder.statusView.setText("已上传报告");
+            if(report.getStatus()==1){
+                holder.dueDate.setText("成绩结果已出");
+                holder.assignmentScoreTxt.setText("作业成绩:"+report.getScore());
+            }else{
+
+                holder.dueDate.setText("等待批阅");
+                holder.assignmentScoreTxt.setText("");
+            }
+
+        }else{
+            holder.statusView.setText("未上传报告");
+            holder.dueDate.setText("过期时间:"+dueDateStr);
+            holder.assignmentScoreTxt.setText("");
+        }
+
         return convertView;
+    }
+    private ReportInfo findReport(int groupPos,int assignmentId){
+        ReportInfo reportObj = null;
+        List<ReportInfo> reportInfos=courseTypes.get(groupPos).getReportInfos();
+
+        if(reportInfos==null||reportInfos.size()==0){
+            return null;
+        }
+
+        for (ReportInfo reportInfo:reportInfos){
+            if(reportInfo.getAssignmentId()==assignmentId){
+                reportObj=reportInfo;
+                break;
+            }
+        }
+
+        return reportObj;
+
     }
 
     private boolean isHasReport(int groupPos,int assignmentId){
@@ -162,4 +225,8 @@ class AssigmentHolder{
     TextView  statusView;
     TextView  courseName;
     TextView  dueDate;
+    TextView  assignmentScoreTxt;
+
+    RelativeLayout relativeLayoutScore;
+    TextView  scoreText;
 }

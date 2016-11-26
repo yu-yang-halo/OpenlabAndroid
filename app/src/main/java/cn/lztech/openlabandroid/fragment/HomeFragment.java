@@ -21,6 +21,7 @@ import net.soulwolf.widget.materialradio.MaterialRadioGroup;
 import net.soulwolf.widget.materialradio.listener.OnCheckedChangeListener;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -131,7 +132,7 @@ public class HomeFragment extends Fragment {
                 if (circularButton1.getProgress() == 0) {
                     if(startTime==null||endTime==null){
                         showToast("请选择预约时间");
-                    }else if(labId<=0){
+                    }else if(labId<0){
                         showToast("请选择实验室和工位");
                     }else{
                         new PostReservationTask(startTime, endTime, labId, deskNum).execute();
@@ -255,7 +256,7 @@ public class HomeFragment extends Fragment {
         String eTime;
         int labID;
         int dNum;
-
+        boolean checkYN;
         PostReservationTask(String sTime,String eTime,int labID,int dNum){
               this.sTime=sTime;
               this.eTime=eTime;
@@ -273,8 +274,32 @@ public class HomeFragment extends Fragment {
         protected String doInBackground(String... params) {
             String loginName=WSConnector.getInstance().getUserMap().get("loginName");
 
+            Calendar calendar=Calendar.getInstance();
+
+            Date startDate=TimeUtils.getDate(sTime,"yyyy-MM-dd HH:mm:ss");
+            Date endDate=TimeUtils.getDate(eTime,"yyyy-MM-dd HH:mm:ss");
+            calendar.setTime(startDate);
+
+            int weekDay=calendar.get(Calendar.DAY_OF_WEEK);
+            int startHr=calendar.get(Calendar.HOUR_OF_DAY);
+            int startMin=calendar.get(Calendar.MINUTE);
+            calendar.setTime(endDate);
+
+            int endHr=calendar.get(Calendar.HOUR_OF_DAY);
+            int endMin=calendar.get(Calendar.MINUTE);
+
+
             try {
-                WSConnector.getInstance().addOrUpdReservation(loginName,sTime,eTime,deskNum,labID,0,0);
+                checkYN=WSConnector.getInstance().checkResvPeriod(labID,weekDay,startHr,startMin,endHr,endMin);
+            } catch (WSException e) {
+                e.printStackTrace();
+            }
+
+
+            try {
+                if(checkYN){
+                    WSConnector.getInstance().addOrUpdReservation(loginName,sTime,eTime,deskNum,labID,0,0);
+                }
             } catch (WSException e) {
                 return e.getErrorMsg();
             } catch (UnsupportedEncodingException e) {
@@ -287,12 +312,17 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String s) {
-            if(s==null){
-                circularButton1.setProgress(100);
+            if(checkYN){
+                if(s==null){
+                    circularButton1.setProgress(100);
+                }else{
+                    showToast(s);
+                    circularButton1.setProgress(-1);
+                }
             }else{
-                showToast(s);
                 circularButton1.setProgress(-1);
             }
+
         }
     }
 
@@ -390,7 +420,9 @@ public class HomeFragment extends Fragment {
         int[] thisYearMonthDay=TimeUtils.getThisYearMonthDay();
 
         DatePicker2 picker = new DatePicker2(getActivity(), DatePicker2.YEAR_MONTH_DAY);
-        picker.setRange(thisYearMonthDay[0], thisYearMonthDay[0]);//年份范围
+        picker.setRange(thisYearMonthDay[0], thisYearMonthDay[0]+1);//年份范围
+
+        picker.setDateRange(TimeUtils.createNewDate(null,0,0,0),TimeUtils.createNewDate(null,14,23,59));
         picker.setTitleText("选择预约日期");
         picker.setSelectedItem(thisYearMonthDay[0], thisYearMonthDay[1], thisYearMonthDay[2]);
 

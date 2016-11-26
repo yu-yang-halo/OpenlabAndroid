@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#FFFFFF"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/ic_launcher"
+        android:id="@+id/imageView4"
+        android:layout_marginTop="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="版本号 1.0.0"
+        android:layout_width="200dp"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:id="@+id/textView14"
+        android:layout_below="@+id/imageView4"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="\@2010-2016 LZ Tech Inc.All rights reserved"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"
+        android:textSize="10sp"
+        android:textColor="#888888"
+        android:id="@+id/textView21" />
+
+    <TextView
+        android:text="合肥联正电子科技有限公司"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:id="@+id/textView20"
+        android:textSize="10sp"
+        android:textColor="#888888"
+        android:gravity="center"
+        android:layout_above="@+id/textView21"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text=""
+        android:layout_width="320dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="53dp"
+        android:gravity="top|left"
+        android:textSize="13sp"
+        android:id="@+id/textView22"
+        android:layout_below="@+id/textView14"
+        android:layout_alignRight="@+id/textView21"
+        android:layout_alignEnd="@+id/textView21" />
+</RelativeLayout>

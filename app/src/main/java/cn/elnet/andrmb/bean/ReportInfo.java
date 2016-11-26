@@ -15,6 +15,52 @@ public class ReportInfo implements Parcelable {
     private String fileName;
     private String submitTime;
 
+    private float score;
+    private String scoreComment;
+    private int givenBy;
+    private String givenTime;
+    private short status;
+
+    public float getScore() {
+        return score;
+    }
+
+    public void setScore(float score) {
+        this.score = score;
+    }
+
+    public String getScoreComment() {
+        return scoreComment;
+    }
+
+    public void setScoreComment(String scoreComment) {
+        this.scoreComment = scoreComment;
+    }
+
+    public int getGivenBy() {
+        return givenBy;
+    }
+
+    public void setGivenBy(int givenBy) {
+        this.givenBy = givenBy;
+    }
+
+    public String getGivenTime() {
+        return givenTime;
+    }
+
+    public void setGivenTime(String givenTime) {
+        this.givenTime = givenTime;
+    }
+
+    public short getStatus() {
+        return status;
+    }
+
+    public void setStatus(short status) {
+        this.status = status;
+    }
+
     public int getReportId() {
         return reportId;
     }
@@ -71,7 +117,11 @@ public class ReportInfo implements Parcelable {
         this.submitTime = submitTime;
     }
 
-    public ReportInfo(int reportId, int userId, int assignmentId, String courseCode, String description, String fileName, String submitTime) {
+
+    public ReportInfo(int reportId, int userId, int assignmentId, String courseCode,
+                      String description, String fileName,
+                      String submitTime,float score,String scoreComment,int givenBy,
+                      String givenTime,short status) {
         this.reportId = reportId;
         this.userId = userId;
         this.assignmentId = assignmentId;
@@ -79,6 +129,12 @@ public class ReportInfo implements Parcelable {
         this.description = description;
         this.fileName = fileName;
         this.submitTime = submitTime;
+
+        this.score=score;
+        this.scoreComment=scoreComment;
+        this.givenBy=givenBy;
+        this.givenTime=givenTime;
+        this.status=status;
     }
     public ReportInfo(){
 
@@ -103,6 +159,12 @@ public class ReportInfo implements Parcelable {
             result.description = source.readString();
             result.fileName = source.readString();
             result.submitTime = source.readString();
+
+            result.score=source.readFloat();
+            result.scoreComment=source.readString();
+            result.givenBy=source.readInt();
+            result.givenTime=source.readString();
+            result.status=(short) source.readInt();
 
             return result;
         }
@@ -136,5 +198,13 @@ public class ReportInfo implements Parcelable {
         dest.writeString(description);
         dest.writeString(fileName);
         dest.writeString(submitTime);
+
+        dest.writeFloat(score);
+        dest.writeString(scoreComment);
+        dest.writeInt(givenBy);
+        dest.writeString(givenTime);
+        dest.writeInt(status);
+
+
     }
 }

@@ -9,6 +9,8 @@ public class AssignmentReportTurple {
     private List<AssignmentType> assignmentTypeList;
     private List<ReportInfo>     reportInfoList;
 
+    private ScoreType scoreType;
+
     public List<AssignmentType> getAssignmentTypeList() {
         return assignmentTypeList;
     }
@@ -21,7 +23,16 @@ public class AssignmentReportTurple {
         return reportInfoList;
     }
 
+    public ScoreType getScoreType() {
+        return scoreType;
+    }
+
+    public void setScoreType(ScoreType scoreType) {
+        this.scoreType = scoreType;
+    }
+
     public void setReportInfoList(List<ReportInfo> reportInfoList) {
         this.reportInfoList = reportInfoList;
+
     }
 }

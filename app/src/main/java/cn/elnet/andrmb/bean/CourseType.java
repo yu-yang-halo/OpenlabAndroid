@@ -46,10 +46,18 @@ public class CourseType {
     private int year;
     private Semester semester;
 
+    public ScoreType getScoreType() {
+        return scoreType;
+    }
 
+    public void setScoreType(ScoreType scoreType) {
+        this.scoreType = scoreType;
+    }
 
     List<AssignmentType> assignmentTypes;
     List<ReportInfo> reportInfos;
+
+    private ScoreType scoreType;
 
     public String getCourseCode() {
         return courseCode;

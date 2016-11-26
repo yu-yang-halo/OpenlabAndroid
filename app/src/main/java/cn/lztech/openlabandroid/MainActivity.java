@@ -16,7 +16,9 @@ import android.widget.Toast;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
+import com.github.florent37.viewanimator.ViewAnimator;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -38,7 +40,7 @@ import cn.lztech.openlabandroid.utils.ViewFindUtils;
 public class MainActivity extends FragmentActivity {
 	private Context mContext = this;
 	private ArrayList<Fragment> mFragments = new ArrayList<>();
-	private String[] mTitles = {"首页", "我的预约", "我的作业", "设置"};
+	private String[] mTitles = {"首页", "我的预约", "我的作业", "个人中心"};
 	private int[] mIconUnselectIds = {
 			R.mipmap.home_btn_home, R.mipmap.home_btn_shop,
 			R.mipmap.home_btn_active, R.mipmap.home_btn_my};
@@ -51,7 +53,9 @@ public class MainActivity extends FragmentActivity {
     private ActionBar mActionbar;
 	private TextView tvTitle;
 	Button leftBtn;
+	Button rightBtn;
 	public RelativeLayout mainRelativeLayout;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -104,6 +108,14 @@ public class MainActivity extends FragmentActivity {
 	public void setSelectPos(int position){
 		mTabLayout_1.setCurrentTab(position);
 		tvTitle.setText(mTitles[position]);
+
+		if(position==2){
+			rightBtn.setVisibility(View.VISIBLE);
+
+		}else{
+			rightBtn.setVisibility(View.GONE);
+		}
+
 	}
 	private boolean initCustomActionBar() {
 		mActionbar = getActionBar();
@@ -115,13 +127,15 @@ public class MainActivity extends FragmentActivity {
 		mActionbar.setCustomView(R.layout.top_back_center_bar);
 		tvTitle = (TextView) mActionbar.getCustomView().findViewById(R.id.tv_tbb_title);
 
-		Button registerBtn=(Button) mActionbar.getCustomView().findViewById(R.id.rightBtn);
+		rightBtn=(Button) mActionbar.getCustomView().findViewById(R.id.rightBtn);
 		leftBtn=(Button) mActionbar.getCustomView().findViewById(R.id.leftBtn);
-		registerBtn.setVisibility(View.GONE);
+		rightBtn.setVisibility(View.GONE);
 		leftBtn.setVisibility(View.GONE);
+
+
+
 		return true;
 	}
-
 
 
 

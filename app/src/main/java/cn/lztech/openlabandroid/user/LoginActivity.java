@@ -31,6 +31,7 @@ import cn.lztech.openlabandroid.fir.FirManagerService;
 public class LoginActivity extends FragmentActivity {
     Button regBtn;
     Button loginBtn;
+    Button findPassBtn;
     EditText usernameEdit;
     EditText passwordEdit;
 
@@ -54,6 +55,7 @@ public class LoginActivity extends FragmentActivity {
         initCustomActionBar();
         regBtn= (Button) findViewById(R.id.regBtn);
         loginBtn= (Button) findViewById(R.id.loginBtn);
+        findPassBtn= (Button) findViewById(R.id.button8);
 
         usernameEdit= (EditText) findViewById(R.id.userNameEditText);
         passwordEdit= (EditText) findViewById(R.id.passwordEditText);
@@ -85,6 +87,14 @@ public class LoginActivity extends FragmentActivity {
                 Intent intent=new Intent(LoginActivity.this,RegisterActivity.class);
                 startActivity(intent);
 
+            }
+        });
+
+        findPassBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(LoginActivity.this,FindPassActivity.class);
+                startActivity(intent);
             }
         });
 

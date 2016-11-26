@@ -1,5 +1,7 @@
 package cn.lztech.openlabandroid.utils;
 
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -87,6 +89,22 @@ public class TimeUtils {
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(formatType);
 		return simpleDateFormat.format(date);
 	}
+	public static  Date  createNewDate(Date date,int addDays,int hour,int minute){
+		if(date==null){
+			date=new Date();
+		}
+
+		Calendar calendar=Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH)+addDays);
+		calendar.set(Calendar.HOUR_OF_DAY,hour);
+		calendar.set(Calendar.MINUTE,minute);
+		calendar.set(Calendar.MILLISECOND,0);
+
+
+		return calendar.getTime();
+	}
+
 
 	public static int getThisYear(){
 		Date date=new Date();
@@ -129,6 +147,22 @@ public class TimeUtils {
 			date=new Date();
 		}
 		return date;
+	}
+	public static Date getServerTime() {
+		Date serverDate = null;
+		URL url = null;// 取得资源对象
+		try {
+			url = new URL("http://www.baidu.com");
+			URLConnection uc = url.openConnection();// 生成连接对象
+			uc.connect(); // 发出连接
+			long ld = uc.getDate(); // 取得网站日期时间
+			serverDate = new Date(ld); // 转换为标准时间对象
+			System.err.println("服务器时间=================" + serverDate);
+		} catch (Exception e) {
+			serverDate = new Date();
+			System.err.println("本地时间=================" + serverDate);
+		}
+		return serverDate;
 	}
 	public static boolean compareToAMoreThanB(String time0,String time1){
 		Date dateA=getDate(time0,"yyyy-MM-dd HH:mm:ss");

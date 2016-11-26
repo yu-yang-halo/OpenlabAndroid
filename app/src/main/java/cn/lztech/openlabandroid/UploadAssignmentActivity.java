@@ -125,6 +125,9 @@ public class UploadAssignmentActivity extends Activity {
     }
 
     private String  filterAssignmentReport( List<ReportInfo> tmps){
+        if(tmps==null){
+            return null;
+        }
         for (ReportInfo ri:tmps){
             if(ri.getAssignmentId()==assignmentId){
                 reportInfo=ri;

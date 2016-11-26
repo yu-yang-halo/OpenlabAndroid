@@ -18,4 +18,10 @@
     <color name="black_40">#40000000</color>
 
     <array name="n" ></array>
+
+    <color name="drop_down_selected">#90000000</color>
+    <color name="drop_down_unselected">#50000000</color>
+    <color name="check_bg">#ffffff</color>
+    <color name="uncheck_bg">#f2f2f2</color>
+
 </resources>

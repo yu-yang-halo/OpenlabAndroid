@@ -15,8 +15,7 @@
         <Button
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:text="张三"
-            android:textSize="25sp"
+            android:textSize="15sp"
             android:textColor="#ffffff"
             android:background="@drawable/button_bg_circle_selector"
             android:id="@+id/button4"
@@ -30,7 +29,6 @@
             android:layout_width="160dp"
             android:layout_height="30dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="15156098260"
             android:layout_marginLeft="5dp"
             android:gravity="center_vertical"
             android:textSize="25sp"
@@ -45,7 +43,6 @@
             android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="手机号：08712112"
             android:id="@+id/textView10"
             android:layout_marginLeft="5dp"
             android:lines="1"
@@ -68,7 +65,10 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:id="@+id/listView2"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/relativeLayout6" />
+
+
 </RelativeLayout>

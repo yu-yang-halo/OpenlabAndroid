@@ -19,7 +19,7 @@
 
     <Button
         android:id="@+id/rightBtn"
-        android:layout_width="60dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
@@ -27,7 +27,6 @@
         android:background="@null"
         android:textSize="20sp"
         android:text=""
-        android:enabled="false"
         android:layout_alignParentTop="true" />
 
     <Button

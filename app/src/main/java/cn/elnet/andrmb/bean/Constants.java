@@ -6,7 +6,7 @@ import java.util.Map;
 public class Constants {
 	public static final int STATUS_NORMAL=0;
     public static final int STATUS_ACTIVE=1;
-    public static final int STATUS_CARD_REMOVED=2;
+    public static final int STATUS_CAR_REMOVE=2;
     public static final int STATUS_CANCEL=3;
     public static final int STATUS_EXPIRED=4;
     public static final int STATUS_USED=5;

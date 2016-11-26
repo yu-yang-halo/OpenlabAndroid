@@ -21,39 +21,31 @@ import java.util.Map;
  * ErrorCode 错误编码及信息
  */
 public enum ErrorCode {
-	ACCEPT(0, "Succeed"),
-	REJECT(1, "Rejected"),
-	CONN_TO_WS_ERR(2,"CONN_TO_WS_ERR"),
-	NET_WORK_TIME_OUT(3,"net work time out"),
+	ACCEPT(0, "成功"),
+	REJECT(1, "服务器错误，请稍后重试"),
+	CONN_TO_WS_ERR(2,"登录失败,请重试"),
+	NET_WORK_TIME_OUT(3,"不能连接到服务器,请检查手机网络状态"),
 	LOGIN_FAILED(4,"login failed"),
-	INVALID_LOGIN_NAME_PWD(1001, "Invalid login name or password"),
-	LOGIN_NAME_NOT_EXIST(1002, "The login name does not exist"),
-	USER_ACCT_LOCKED(1003, "The user account is locked"),
-	DUP_NAME(1004, "Name has already been used in database"),	
-	PERMISSION_DENY(1005, "The permission denied."),
-	SEC_TOKEN_EXPRIED(1006, "The security token was expired "),
-	INVALID_SEC_TOKEN(1007, "Invalid security token"),
-	USER_ALREADY_LOGOUT(1008, "The user was logout"),
-	USER_ACCT_NOT_EXIST(1009, "The user account does not exist"),
-	DOMAIN_NOT_FOUND(1010, "The domain was not found"),
-	ACTION_NOT_FOUND(1011, "The action was not found"),
-	TARGET_NOT_FOUND(1012, "The target was not found"),
+	INVALID_LOGIN_NAME_PWD(1001, "用户名或密码输入错误"),
+	LOGIN_NAME_NOT_EXIST(1002, "用户名或密码输入错误"),
+	USER_ACCT_LOCKED(1003, "账户被锁定"),
+	DUP_NAME(1008, "用户名已经被使用"),
+	PERMISSION_DENY(1005, "权限拒绝"),
+	SEC_TOKEN_EXPRIED(1006, "token失效,请重新登录"),
+	INVALID_SEC_TOKEN(1007, "token失效,请重新登录"),
+	USER_ALREADY_LOGOUT(2000, "实验室信息无法添加到该系统"),
+	USER_ACCT_NOT_EXIST(2001, "预约无法找到"),
+	DOMAIN_NOT_FOUND(2003, "作业无法找到"),
+	ACTION_NOT_FOUND(2004, "预约已经存在"),
+	TARGET_NOT_FOUND(2005, "预约无法取消"),
 	
-	INTERNAL_ERROR(1100, "Internal error"),
-	REQ_TIME_OUT(1101, "Request time out"),	
-	WS_CONN_ERROR(1102, "Fail to connect to the web services"),
-	INTERNAL_CONN_ERROR(1103, "The web services internal connection error"),
-	INTERNAL_DB_ERR(1104, "Internal database error"),
-	DATA_CONVERSION_ERR(1105, "Data conversion error"),
-	
-	LAB_NOT_FOUND(2000, "No lab info was added into the system"),
-	RESV_NOT_FOUND(2001, "No reservation was found "),
-	DEVICE_NOT_FOUND(2002, "The device was not found "),
-	AS_NOT_FOUND(2003, "The assignment was not found "),
-	RESV_ALREADY_EXIST(2004, "reservation already exist "),
-	RESV_CAN_NOT_CANCEL(2005, "reservation can't cancel "),
-	RESV_FULL(2006, "reservation full "),
-	UNKNOWN_ERR(2020, "Unknown error");
+	INTERNAL_ERROR(2006, "预约已满，无法预约"),
+	REQ_TIME_OUT(2012, "验证不存在"),
+	WS_CONN_ERROR(2013, "验证码不匹配"),
+	INTERNAL_CONN_ERROR(9999, "网络超时，无法连接"),
+
+
+	UNKNOWN_ERR(10000, "Unknown error");
 
 	
 	private static final Map<Integer, ErrorCode> lookup = new HashMap<Integer, ErrorCode>();

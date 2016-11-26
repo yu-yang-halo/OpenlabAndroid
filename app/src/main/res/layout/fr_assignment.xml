@@ -1,37 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/r1">
 
-    <RelativeLayout
+    <com.yyydjk.library.DropDownMenu
+        android:id="@+id/dropDownMenu"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="您还没有作业"
-            android:id="@+id/emptyDescView"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
-        <com.baoyz.widget.PullRefreshLayout
-            android:id="@+id/swipeRefreshLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ExpandableListView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/assignmentListView">
-
-
-            </ExpandableListView>
-
-
-        </com.baoyz.widget.PullRefreshLayout>
-
-    </RelativeLayout>
+        android:layout_height="match_parent"
+        app:ddmenuTextSize="18sp"
+        app:ddtextUnselectedColor="@color/drop_down_unselected"
+        app:ddtextSelectedColor="@color/drop_down_selected"
+        app:dddividerColor="@color/gray"
+        app:ddunderlineColor="@color/gray"
+        app:ddmenuSelectedIcon="@mipmap/drop_down_selected_icon"
+        app:ddmaskColor="@color/mask_color"
+        app:ddmenuBackgroundColor="#a0ffffff"
+        app:ddmenuUnselectedIcon="@mipmap/drop_down_unselected_icon"
+        />
 
 
 </RelativeLayout>
