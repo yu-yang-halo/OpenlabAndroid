@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
+import cn.lztech.openlabandroid.cache.BitmapCacheManager;
 import me.iwf.photopicker.PhotoPickerActivity;
 import me.iwf.photopicker.widget.TouchImageView;
 
@@ -24,8 +25,8 @@ public class PhotoPreviewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_photo_preview);
         previewImage= (TouchImageView) findViewById(R.id.previewImage);
+        image_data=BitmapCacheManager.getInstance().getCurrentBm();
 
-        image_data=getIntent().getParcelableExtra(KEY_BITMAP_DATA);
 
         previewImage.setImageBitmap(image_data);
 
@@ -39,7 +40,6 @@ public class PhotoPreviewActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        image_data.recycle();
         finish();
     }
 }

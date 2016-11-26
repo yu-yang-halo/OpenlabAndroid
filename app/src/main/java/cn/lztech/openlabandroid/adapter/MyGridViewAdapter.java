@@ -29,6 +29,7 @@ import cn.lztech.openlabandroid.MainActivity;
 import cn.lztech.openlabandroid.PhotoPreviewActivity;
 import cn.lztech.openlabandroid.R;
 import cn.lztech.openlabandroid.UploadAssignmentActivity;
+import cn.lztech.openlabandroid.cache.BitmapCacheManager;
 import cn.lztech.openlabandroid.utils.DensyUtils;
 import me.iwf.photopicker.PhotoPreview;
 
@@ -116,8 +117,12 @@ public class MyGridViewAdapter extends BaseAdapter {
                                         +" H:"+reportImages.get(position).getBm().getHeight()+" BM:"+reportImages.get(position).getBm());
 
                         Intent intent=new Intent(ctx,PhotoPreviewActivity.class);
-                        intent.putExtra(PhotoPreviewActivity.KEY_BITMAP_DATA,reportImages.get(position).getBm());
+
+                        BitmapCacheManager.getInstance().setCurrentBm(reportImages.get(position).getBm());
+
                         ctx.startActivity(intent);
+
+
                     }
 
                 }

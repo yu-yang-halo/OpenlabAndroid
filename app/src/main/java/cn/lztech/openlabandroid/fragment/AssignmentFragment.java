@@ -231,8 +231,6 @@ public class AssignmentFragment extends Fragment {
             if(years!=null&&years.size()>0&&yearSemesterArr.length==2){
                 yearAdapter.setData(years);
                 yearAdapter.notifyDataSetChanged();
-
-
                 for (int i=0;i<years.size();i++){
                     if(yearSemesterArr[0]==Integer.parseInt(years.get(i))){
                         pos0=i;
@@ -243,15 +241,12 @@ public class AssignmentFragment extends Fragment {
                 if(pos1<0){
                     pos1=0;
                 }
-
+                selectedYear=years.get(pos0);
+                selectedSemester=yearSemesterArr[1]+"";
             }
 
             yearAdapter.setCheckItem(pos0);
             semesterAdapter.setCheckItem(pos1);
-            selectedYear=years.get(pos0);
-            selectedSemester=yearSemesterArr[1]+"";
-
-
             if(pos0>=0&&pos1>=0){
                 mDropDownMenu.setDropDownMenu(Arrays.asList(new String[]{selectedYear,semesters[pos1]}), popupViews, contentView);
 
