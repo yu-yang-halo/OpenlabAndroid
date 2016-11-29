@@ -33,19 +33,21 @@ public enum ErrorCode {
 	PERMISSION_DENY(1005, "权限拒绝"),
 	SEC_TOKEN_EXPRIED(1006, "token失效,请重新登录"),
 	INVALID_SEC_TOKEN(1007, "token失效,请重新登录"),
+	INVALID_USERCODE(1013, "无效的学号"),
+	RESERVE_FAILED(1100,"预约时间验证失败,暂时无法预约"),
+	INTERNEL_DATA_ERROR(1104,"该用户名已经存在"),
 	USER_ALREADY_LOGOUT(2000, "实验室信息无法添加到该系统"),
 	USER_ACCT_NOT_EXIST(2001, "预约无法找到"),
 	DOMAIN_NOT_FOUND(2003, "作业无法找到"),
 	ACTION_NOT_FOUND(2004, "预约已经存在"),
 	TARGET_NOT_FOUND(2005, "预约无法取消"),
-	
 	INTERNAL_ERROR(2006, "预约已满，无法预约"),
 	REQ_TIME_OUT(2012, "验证不存在"),
 	WS_CONN_ERROR(2013, "验证码不匹配"),
 	INTERNAL_CONN_ERROR(9999, "网络超时，无法连接"),
 
 
-	UNKNOWN_ERR(10000, "Unknown error");
+	UNKNOWN_ERR(10000, "亲,程序出错了,我们会继续完善");
 
 	
 	private static final Map<Integer, ErrorCode> lookup = new HashMap<Integer, ErrorCode>();

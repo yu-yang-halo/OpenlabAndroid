@@ -78,7 +78,7 @@ import javax.xml.parsers.ParserConfigurationException;
 public class WSConnector {
 	private static String openlabUrl = "";
 	private static String authapiUrl = "";
-	private static String IP1 = "202.38.78.70";//202.38.78.70
+	private static String IP1 = "192.168.2.151";//202.38.78.70
 	private static String portStr = "8080";
 	private static final String REQUEST_HEAD = "http://";
 	private static WSConnector instance = new WSConnector();
@@ -88,9 +88,9 @@ public class WSConnector {
 	private WSConnector() {
 		this.userMap = new LinkedHashMap<String, String>();
 		openlabUrl = REQUEST_HEAD + IP1 + ":" + portStr
-				+ "/elws/services/openlab/";
+				+ "/elws2/services/openlab/";
 		authapiUrl = REQUEST_HEAD + IP1 + ":" + portStr
-				+ "/elws/services/authapi/";//authapi  openauth
+				+ "/elws2/services/authapi/";//authapi  openauth
 	}
 
 	public Map<String, String> getUserMap() {
@@ -1431,7 +1431,7 @@ public class WSConnector {
 
 		String service = WSConnector.authapiUrl + "updateUser?senderId="+userId
 				+"&secToken="+secToken
-				+"&userId="+userId+"&password="+ MD5Generator.reverseMD5Value(pwd);
+				+"&userId="+userId+"&password="+ MD5Generator.reverseMD5Value(pwd)+"&role=student";
 		if(vcode!=null&&loginName!=null&&phone!=null){
 			service+="&name="
 					+ loginName

@@ -1,7 +1,10 @@
 package cn.lztech.openlabandroid.user;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,11 +24,15 @@ import java.io.UnsupportedEncodingException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cn.elnet.andrmb.bean.Constants;
+import cn.elnet.andrmb.bean.ReservationType;
 import cn.elnet.andrmb.bean.UserType;
 import cn.elnet.andrmb.elconnector.WSConnector;
 import cn.elnet.andrmb.elconnector.WSException;
 import cn.lztech.openlabandroid.R;
+import cn.lztech.openlabandroid.adapter.MyOrderAdapter;
 import cn.lztech.openlabandroid.utils.RegexUtils;
+import cn.lztech.openlabandroid.utils.TimeUtils;
 
 /**
  * Created by Administrator on 2016/9/18.
@@ -235,8 +242,25 @@ public class FindPassActivity extends FragmentActivity {
         protected void onPostExecute(String result) {
             progressHUD.dismiss();
             if(result==null){
-                Toast.makeText(ctx,"修改成功",Toast.LENGTH_SHORT).show();
-                finish();
+
+                if(value_find_pwd_type==VALUE_FIND_PWD_TYPE_LOGINED){
+                    new AlertDialog.Builder(ctx)
+                            .setTitle("提示")
+                            .setMessage("密码修改成功,请重新登录")
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent=new Intent(FindPassActivity.this, LoginActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                }
+                            }).setCancelable(false).show();
+
+                }else{
+                    finish();
+                }
+
+
             }else{
                 Toast.makeText(ctx,result,Toast.LENGTH_SHORT).show();
             }

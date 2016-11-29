@@ -1,6 +1,7 @@
 package cn.lztech.openlabandroid.fragment;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import cn.elnet.andrmb.bean.DeskInfo;
 import cn.elnet.andrmb.bean.LabInfoType;
 import cn.elnet.andrmb.elconnector.WSConnector;
 import cn.elnet.andrmb.elconnector.WSException;
+import cn.lztech.openlabandroid.MainActivity;
 import cn.lztech.openlabandroid.R;
 import cn.lztech.openlabandroid.utils.DatePicker2;
 import cn.lztech.openlabandroid.utils.OptionPicker2;
@@ -60,6 +62,13 @@ public class HomeFragment extends Fragment {
     private String month;
     private String day;
 
+    MainActivity mainActivity;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mainActivity= (MainActivity) context;
+    }
 
     @Nullable
     @Override
@@ -135,6 +144,11 @@ public class HomeFragment extends Fragment {
                     }else if(labId<0){
                         showToast("请选择实验室和工位");
                     }else{
+
+                       // Date startDate=TimeUtils.getDate(startTime,"yyyy-MM-dd HH:mm:ss");
+                       // Date endDate=TimeUtils.getDate(endTime,"yyyy-MM-dd HH:mm:ss");
+
+
                         new PostReservationTask(startTime, endTime, labId, deskNum).execute();
                     }
                 }else{
@@ -150,7 +164,7 @@ public class HomeFragment extends Fragment {
 
     private void reReservation(){
         new AlertDialog.Builder(getActivity()).setTitle("提示")
-                .setMessage("是否重新预约?")
+                .setMessage("是否继续预约?")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -315,6 +329,14 @@ public class HomeFragment extends Fragment {
             if(checkYN){
                 if(s==null){
                     circularButton1.setProgress(100);
+                    circularButton1.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            paramsReset();
+                            mainActivity.setSelectPos(1);
+                        }
+                    },1500);
+
                 }else{
                     showToast(s);
                     circularButton1.setProgress(-1);
@@ -340,22 +362,27 @@ public class HomeFragment extends Fragment {
         if(type==1){
            Date date=TimeUtils.getDate(startTime, "yyyy-MM-dd HH:mm:ss");
 
-           if(date.getMinutes()>=30){
-               date.setHours(date.getHours()+1);
-               picker.setSelectedItem(date.getHours(),0);
+           Calendar calendar=Calendar.getInstance();
+           calendar.setTime(date);
+
+
+           if(calendar.get(Calendar.MINUTE)>=30){
+               int hour=calendar.get(Calendar.HOUR_OF_DAY);
+               calendar.set(Calendar.HOUR_OF_DAY,hour+1);
+               picker.setSelectedItem(calendar.get(Calendar.HOUR_OF_DAY),0);
            }else{
-               picker.setSelectedItem(date.getHours(),30);
+               picker.setSelectedItem(calendar.get(Calendar.HOUR_OF_DAY),30);
            }
-           int[] yMDs=TimeUtils.getThisYearMonthDay(date);
+
+
+            int[] yMDs=TimeUtils.getThisYearMonthDay(calendar.getTime());
 
             year=yMDs[0]+"";
             month=yMDs[1]+"";
             day=yMDs[2]+"";
 
         }else{
-            /*
-                 bug 会出现
-             */
+
             if(hourMinutes[1]>=30){
                 picker.setSelectedItem(hourMinutes[0]+1,0);
             }else{

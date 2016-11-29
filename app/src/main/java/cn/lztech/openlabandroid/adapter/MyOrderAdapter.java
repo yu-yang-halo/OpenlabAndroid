@@ -1,6 +1,9 @@
 package cn.lztech.openlabandroid.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +26,7 @@ import cn.elnet.andrmb.elconnector.WSException;
 import cn.lztech.openlabandroid.MainActivity;
 import cn.lztech.openlabandroid.R;
 import cn.lztech.openlabandroid.cache.ContentBox;
+import cn.lztech.openlabandroid.user.LoginActivity;
 import cn.lztech.openlabandroid.utils.TimeUtils;
 
 /**
@@ -116,11 +120,30 @@ public class MyOrderAdapter extends BaseAdapter {
             cancelBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ReservationType type=reservationTypes.get(position);
-                    type.setStartTime(TimeUtils.formatString(type.getStartTime(),"yyyy-MM-dd HH:mm:ss"));
-                    type.setEndTime(TimeUtils.formatString(type.getEndTime(), "yyyy-MM-dd HH:mm:ss"));
-                    type.setStatus(Constants.STATUS_CANCEL);
-                    new CancelTask(type).execute();
+                    new AlertDialog.Builder(ctx)
+                            .setTitle("提示")
+                            .setMessage("是否取消当前预约")
+                            .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    ReservationType type=reservationTypes.get(position);
+                                    type.setStartTime(TimeUtils.formatString(type.getStartTime(),"yyyy-MM-dd HH:mm:ss"));
+                                    type.setEndTime(TimeUtils.formatString(type.getEndTime(), "yyyy-MM-dd HH:mm:ss"));
+                                    type.setStatus(Constants.STATUS_CANCEL);
+                                    new CancelTask(type).execute();
+
+                                }
+                            }).setNegativeButton("否",new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                          }).show();
+
+
+
+
                 }
             });
         }else{

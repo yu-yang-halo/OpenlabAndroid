@@ -13,10 +13,10 @@
         android:id="@+id/relativeLayout4">
 
         <TextView
-            android:layout_width="95dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="学号"
+            android:text="账号"
             android:id="@+id/textView4"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
@@ -33,7 +33,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginLeft="40dp"
             android:background="@null"
-            android:hint=""
+            android:hint="请使用学号"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
     </RelativeLayout>

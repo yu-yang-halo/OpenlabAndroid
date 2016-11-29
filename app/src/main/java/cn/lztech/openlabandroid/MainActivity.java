@@ -82,9 +82,7 @@ public class MainActivity extends FragmentActivity {
 			public void onTabSelect(int position) {
 				setSelectPos(position);
 
-				if(position==1){
-					dataRequest();
-				}
+
 
 			}
 
@@ -114,6 +112,10 @@ public class MainActivity extends FragmentActivity {
 
 		}else{
 			rightBtn.setVisibility(View.GONE);
+		}
+
+		if(position==1){
+			dataRequest();
 		}
 
 	}

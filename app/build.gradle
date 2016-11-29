@@ -8,8 +8,8 @@ android {
         applicationId "cn.lztech.openlabandroid"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 22
-        versionName "1.2.0"
+        versionCode 23
+        versionName "1.2.11"
     }
     buildTypes {
         release {

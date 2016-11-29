@@ -91,8 +91,9 @@ public class TimePicker2 extends WheelPicker {
      * @param minute the minute
      */
     public void setSelectedItem(int hour, int minute) {
-        selectedHour = String.valueOf(hour);
-        selectedMinute = String.valueOf(minute);
+
+        selectedHour = DateUtils.fillZero(hour);
+        selectedMinute = DateUtils.fillZero(minute);
     }
 
     /**
