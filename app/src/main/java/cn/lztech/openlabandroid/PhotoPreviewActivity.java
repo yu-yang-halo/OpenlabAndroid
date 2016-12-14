@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import cn.lztech.openlabandroid.cache.BitmapCacheManager;
 import me.iwf.photopicker.PhotoPickerActivity;
@@ -16,7 +17,7 @@ import me.iwf.photopicker.widget.TouchImageView;
 /**
  * Created by Administrator on 2016/6/17.
  */
-public class PhotoPreviewActivity extends Activity {
+public class PhotoPreviewActivity extends StatusBarActivity {
     public static String KEY_BITMAP_DATA="bitmap_data_key";
     TouchImageView previewImage;
     private  Bitmap image_data;
@@ -24,6 +25,9 @@ public class PhotoPreviewActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_photo_preview);
+
+
+
         previewImage= (TouchImageView) findViewById(R.id.previewImage);
         image_data=BitmapCacheManager.getInstance().getCurrentBm();
 

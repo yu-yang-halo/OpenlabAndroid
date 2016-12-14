@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     android:padding="5dp"
+    android:fitsSystemWindows="true"
    >
 
 

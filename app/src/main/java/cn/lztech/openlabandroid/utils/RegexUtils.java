@@ -21,6 +21,20 @@ public class RegexUtils {
         return mat.matches();
 
     }
+    public static boolean isNumber(String number){
+        /**
+         * 判断是否是手机号码
+         *
+         *     String rexp="^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$";
+         Pattern p = Pattern.compile(rexp);
+         Matcher m = p.matcher(mobiles);
+         return m.matches();
+         */
+        String rexp="\\d{2,7}$";
+        Pattern p = Pattern.compile(rexp);
+        Matcher m = p.matcher(number);
+        return m.matches();
+    }
     public static boolean isMobileNO(String mobiles){
         /**
          * 判断是否是手机号码

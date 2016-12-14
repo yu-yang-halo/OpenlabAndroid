@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.mingle.sweetpick.CustomDelegate;
 import com.mingle.sweetpick.SweetSheet;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -50,7 +52,7 @@ import me.iwf.photopicker.utils.PhotoPickerIntent;
 /**
  * Created by Administrator on 2016/5/19.
  */
-public class UploadAssignmentActivity extends Activity {
+public class UploadAssignmentActivity extends StatusBarActivity {
     public static final  String BUNDLE_KEY_COURSECODE="bundle_key_coursecode";
     public static final  String BUNDLE_KEY_ASSIGNMENTID="bundle_key_assignmentId";
     public static final  String BUNDLE_KEY_TITLE="bundle_key_title";
@@ -187,6 +189,14 @@ public class UploadAssignmentActivity extends Activity {
 
 
     private void requestCamera(int requestCode) {
+        String str=Environment.getExternalStorageState();
+        if(!str.equals(Environment.MEDIA_MOUNTED)){
+
+            Toast.makeText(this,str,Toast.LENGTH_SHORT).show();
+            return;
+
+        }
+
 
         if(requestCode==REQUEST_CODE_ALBUM){
 

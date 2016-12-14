@@ -3,6 +3,8 @@ package cn.lztech.openlabandroid.user;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,10 +28,13 @@ import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 import cn.lztech.openlabandroid.MainActivity;
 import cn.lztech.openlabandroid.R;
+import cn.lztech.openlabandroid.StatusBarActivity;
 import cn.lztech.openlabandroid.cache.ContentBox;
 import cn.lztech.openlabandroid.fir.FirManagerService;
 
-public class LoginActivity extends FragmentActivity {
+import static cn.lztech.openlabandroid.R.color.theme_color;
+
+public class LoginActivity extends StatusBarActivity {
     Button regBtn;
     Button loginBtn;
     Button findPassBtn;
@@ -53,6 +59,9 @@ public class LoginActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         initCustomActionBar();
+
+
+
         regBtn= (Button) findViewById(R.id.regBtn);
         loginBtn= (Button) findViewById(R.id.loginBtn);
         findPassBtn= (Button) findViewById(R.id.button8);
@@ -105,6 +114,19 @@ public class LoginActivity extends FragmentActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        String[] arr=IpConfigHelper.fetchIpAddrPortArr(this);
+
+
+        String ipAddrStr=arr[0];
+        String portStr  =arr[1];
+
+        WSConnector.getInstance(ipAddrStr,portStr,false);
+    }
+
     private boolean initCustomActionBar() {
         ActionBar  mActionbar = getActionBar();
         if (mActionbar == null) {
@@ -118,7 +140,17 @@ public class LoginActivity extends FragmentActivity {
         Button leftBtn=(Button) mActionbar.getCustomView().findViewById(R.id.leftBtn);
         leftBtn.setVisibility(View.GONE);
         tvTitle.setText("科大开放实验室");
-        registerBtn.setVisibility(View.GONE);
+
+
+        registerBtn.setVisibility(View.VISIBLE);
+        registerBtn.setText("配置");
+        registerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(LoginActivity.this,SettingsActity.class);
+                startActivity(intent);
+            }
+        });
 
         return true;
     }

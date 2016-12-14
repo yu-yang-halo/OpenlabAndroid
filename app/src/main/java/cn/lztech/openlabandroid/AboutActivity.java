@@ -10,11 +10,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.readystatesoftware.systembartint.SystemBarTintManager;
+
 /**
  * Created by Administrator on 2016/10/26.
  */
 
-public class AboutActivity extends FragmentActivity {
+public class AboutActivity extends StatusBarActivity {
     private  TextView versionLabel;
     private  TextView contentLabel;
 
@@ -22,7 +24,6 @@ public class AboutActivity extends FragmentActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_about);
-
         initCustomActionBar();
 
         versionLabel= (TextView) findViewById(R.id.textView14);

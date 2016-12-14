@@ -78,7 +78,7 @@ public class AssignmentFragment extends Fragment {
     private List<View> popupViews = new ArrayList<>();
 
     private List<String> years=new ArrayList<String>();
-    private String semesters[]={"第一学期","第二学期"};
+    private String semesters[]={"第一学期","第二学期","第三学期"};
 
 
     ListDropDownAdapter yearAdapter,semesterAdapter;
@@ -236,6 +236,7 @@ public class AssignmentFragment extends Fragment {
                         pos0=i;
                     }
                 }
+
                 pos1=yearSemesterArr[1]-1;
 
                 if(pos1<0){

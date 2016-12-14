@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Timer;
@@ -30,6 +31,7 @@ import cn.elnet.andrmb.bean.UserType;
 import cn.elnet.andrmb.elconnector.WSConnector;
 import cn.elnet.andrmb.elconnector.WSException;
 import cn.lztech.openlabandroid.R;
+import cn.lztech.openlabandroid.StatusBarActivity;
 import cn.lztech.openlabandroid.adapter.MyOrderAdapter;
 import cn.lztech.openlabandroid.utils.RegexUtils;
 import cn.lztech.openlabandroid.utils.TimeUtils;
@@ -37,7 +39,7 @@ import cn.lztech.openlabandroid.utils.TimeUtils;
 /**
  * Created by Administrator on 2016/9/18.
  */
-public class FindPassActivity extends FragmentActivity {
+public class FindPassActivity extends StatusBarActivity {
     public static  String KEY_FIND_PWD_TYPE="key_find_pwd";
     public static  int VALUE_FIND_PWD_TYPE_LOGINED=1000;
     public static  int VALUE_FIND_PWD_TYPE_UNLOGIN=1001;

@@ -6,6 +6,7 @@
  */
 package cn.elnet.andrmb.elconnector;
 
+import android.app.Application;
 import android.util.Log;
 
 import java.io.BufferedOutputStream;
@@ -78,7 +79,7 @@ import javax.xml.parsers.ParserConfigurationException;
 public class WSConnector {
 	private static String openlabUrl = "";
 	private static String authapiUrl = "";
-	private static String IP1 = "192.168.2.151";//202.38.78.70
+	private static String IP1 = "202.38.78.70";//202.38.78.70
 	private static String portStr = "8080";
 	private static final String REQUEST_HEAD = "http://";
 	private static WSConnector instance = new WSConnector();
@@ -88,10 +89,12 @@ public class WSConnector {
 	private WSConnector() {
 		this.userMap = new LinkedHashMap<String, String>();
 		openlabUrl = REQUEST_HEAD + IP1 + ":" + portStr
-				+ "/elws2/services/openlab/";
+				+ "/elws/services/openlab/";
 		authapiUrl = REQUEST_HEAD + IP1 + ":" + portStr
-				+ "/elws2/services/authapi/";//authapi  openauth
+				+ "/elws/services/authapi/";//authapi  openauth
 	}
+
+
 
 	public Map<String, String> getUserMap() {
 		return userMap;
@@ -102,6 +105,7 @@ public class WSConnector {
 	}
 
 	public static WSConnector getInstance() {
+
 		return instance;
 	}
 
@@ -498,6 +502,10 @@ public class WSConnector {
 				int currentYear=parseElementValueToInt(yearNode);
 				int currentSemester=parseElementValueToInt(semesterNode);
 
+				if(currentSemester>3){
+					currentSemester=3;
+				}
+
 				return new int[]{currentYear,currentSemester};
 
 			}
@@ -724,11 +732,23 @@ public class WSConnector {
 						}
 
 						int  semester = Integer.parseInt(semesterNode.getFirstChild().getNodeValue());
+						if(semester>3){
+							semester=3;
+						}
 						int  year = Integer.parseInt(yearNode.getFirstChild().getNodeValue());
+
 
 						semesterTypes.add(new SemesterType(year,semester));
 
 					}
+
+					Collections.sort(semesterTypes, new Comparator<SemesterType>() {
+						@Override
+						public int compare(SemesterType lhs, SemesterType rhs) {
+
+							return lhs.getYear()-rhs.getYear();
+						}
+					});
 
 				    return semesterTypes;
 				}
@@ -1431,12 +1451,27 @@ public class WSConnector {
 
 		String service = WSConnector.authapiUrl + "updateUser?senderId="+userId
 				+"&secToken="+secToken
-				+"&userId="+userId+"&password="+ MD5Generator.reverseMD5Value(pwd)+"&role=student";
+				+"&userId="+userId+"&password="+ MD5Generator.reverseMD5Value(pwd);
+
+
+
 		if(vcode!=null&&loginName!=null&&phone!=null){
 			service+="&name="
 					+ loginName
 					+"&vCode="+vcode+"&phone="+phone;
 		}
+		//PB14210099
+		//05650
+		if (loginName == null) {
+			service += "&userRole=student";
+		}else{
+			if(loginName.length()>=10){
+				service += "&userRole=student";
+			}else{
+				service += "&userRole=teacher";
+			}
+		}
+
 
 
 		Logger.getLogger(this.getClass()).info("createUser URL" + service);
@@ -1476,8 +1511,14 @@ public class WSConnector {
 		if (userType.getPhone() != null) {
 			service += "&phone=" + userType.getPhone();
 		}
-		if (userType.getUserRole() != null) {
-			service += "&userRole=" + userType.getUserRole();
+		if (userType.getName() != null) {
+			//PB14210099
+			//05650
+			if(userType.getName().length()>=10){
+				service += "&userRole=student";
+			}else{
+				service += "&userRole=teacher";
+			}
 		}
 		if (userType.getCardId() != null) {
 			service += "&cardId=" + userType.getCardId();
@@ -1499,6 +1540,9 @@ public class WSConnector {
 			int errorCode = Integer.parseInt(errCodeNode.getFirstChild()
 					.getNodeValue());
 			if (errorCode == ErrorCode.ACCEPT.getCode()) {
+				if(userIdNode==null){
+					return -1;
+				}
 				int userId = Integer.parseInt(userIdNode.getFirstChild()
 						.getNodeValue());
 				return userId;

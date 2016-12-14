@@ -17,6 +17,7 @@ import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.github.florent37.viewanimator.ViewAnimator;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ import cn.lztech.openlabandroid.fragment.SettingsFragment;
 import cn.lztech.openlabandroid.utils.TabEntity;
 import cn.lztech.openlabandroid.utils.ViewFindUtils;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends StatusBarActivity {
 	private Context mContext = this;
 	private ArrayList<Fragment> mFragments = new ArrayList<>();
 	private String[] mTitles = {"首页", "我的预约", "我的作业", "个人中心"};
@@ -60,6 +61,7 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+
 		mainRelativeLayout= (RelativeLayout) findViewById(R.id.mainRelativeLayout);
 
 		initCustomActionBar();

@@ -118,7 +118,6 @@ public class MyApplication extends Application {
         @Override
         public void handleMessage(Message msg) {
             if(ErrorCode.SEC_TOKEN_EXPRIED.getCode()==msg.what
-                    ||ErrorCode.USER_ALREADY_LOGOUT.getCode()==msg.what
                     ||ErrorCode.INVALID_SEC_TOKEN.getCode()==msg.what){
                 new AlertDialog.Builder(currentActivity)
                         .setTitle("提示")
@@ -131,8 +130,22 @@ public class MyApplication extends Application {
                                 startActivity(intent);
 
                             }
-                        }).show();
-            }else if(msg.what==999999){
+                        }).setCancelable(false).show();
+            }else if(ErrorCode.DUP_NAME_LOGIN_OUT.getCode()==msg.what){
+                new AlertDialog.Builder(currentActivity)
+                        .setTitle("提示")
+                        .setMessage(ErrorCode.DUP_NAME_LOGIN_OUT.getDesc())
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent=new Intent(getApplicationContext(), LoginActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+
+                            }
+                        }).setCancelable(false).show();
+            }
+            else if(msg.what==999999){
                 String message=msg.getData().getString("message");
                 Toast.makeText(currentActivity,message,Toast.LENGTH_LONG).show();
             }

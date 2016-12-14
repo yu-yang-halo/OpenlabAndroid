@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.yyydjk.library.DropDownMenu;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ import cn.lztech.openlabandroid.fragment.AssignmentFragment;
  * Created by Administrator on 2016/10/20.
  */
 
-public class ScoreActivity extends FragmentActivity {
+public class ScoreActivity extends StatusBarActivity {
 
 
     private ListView scoreListView;
@@ -63,7 +64,6 @@ public class ScoreActivity extends FragmentActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fr_assignment);
-
 
         initCustomActionBar();
 

@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:background="#eeeeee"
     android:id="@+id/mainRelativeLayout"
+    android:fitsSystemWindows="true"
     android:scrollbars="none">
     <FrameLayout
         android:id="@+id/currentPageFragment"

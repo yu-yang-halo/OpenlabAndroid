@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Timer;
@@ -25,10 +26,11 @@ import cn.elnet.andrmb.elconnector.WSConnector;
 import cn.elnet.andrmb.elconnector.WSException;
 import cn.elnet.andrmb.elconnector.util.Util;
 import cn.lztech.openlabandroid.R;
+import cn.lztech.openlabandroid.StatusBarActivity;
 import cn.lztech.openlabandroid.cache.ContentBox;
 import cn.lztech.openlabandroid.utils.RegexUtils;
 
-public class RegisterActivity extends FragmentActivity {
+public class RegisterActivity extends StatusBarActivity {
     EditText  nameEdit;
     EditText  passEdit;
     EditText  repassEdit;
@@ -43,6 +45,7 @@ public class RegisterActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
+
         initCustomActionBar();
 
 
