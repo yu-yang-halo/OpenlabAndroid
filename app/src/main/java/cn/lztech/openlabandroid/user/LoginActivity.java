@@ -21,6 +21,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import java.util.HashSet;
 import java.util.Set;
 
+import cn.elnet.andrmb.bean.UserType;
 import cn.elnet.andrmb.elconnector.WSConnector;
 import cn.elnet.andrmb.elconnector.WSException;
 import cn.elnet.andrmb.elconnector.util.MD5Generator;
@@ -40,7 +41,7 @@ public class LoginActivity extends StatusBarActivity {
     Button findPassBtn;
     EditText usernameEdit;
     EditText passwordEdit;
-
+    UserType userType;
 
     @Override
     protected void onResume() {
@@ -142,7 +143,7 @@ public class LoginActivity extends StatusBarActivity {
         tvTitle.setText("科大开放实验室");
 
 
-        registerBtn.setVisibility(View.VISIBLE);
+        registerBtn.setVisibility(View.GONE);
         registerBtn.setText("配置");
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,6 +172,7 @@ public class LoginActivity extends StatusBarActivity {
 
             try {
                 WSConnector.getInstance().login(loginName,password);
+                userType=WSConnector.getInstance().getUser();
             } catch (WSException e) {
                 return e.getErrorMsg();
             }
@@ -193,6 +195,13 @@ public class LoginActivity extends StatusBarActivity {
         protected void onPostExecute(String result) {
             progressHUD.dismiss();
             if(result==null){
+
+                if(userType!=null) {
+                    ContentBox.loadString(LoginActivity.this,
+                            ContentBox.KEY_REALNAME, userType.getRealName());
+                }
+
+
                 String userId=WSConnector.getInstance().getUserMap().get("userId");
                 Set<String> tags=new HashSet<String>();
 

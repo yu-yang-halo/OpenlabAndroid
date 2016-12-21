@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
+
 
 import cn.lztech.openlabandroid.R;
 import cn.lztech.openlabandroid.StatusBarActivity;
@@ -32,6 +34,10 @@ public class SettingsActity extends StatusBarActivity {
 
         ipEditText= (EditText) findViewById(R.id.editText);
         portEditText= (EditText) findViewById(R.id.editText2);
+
+
+
+
 
         String[] ipPortArr=IpConfigHelper.fetchIpAddrPortArr(this);
 
@@ -65,11 +71,13 @@ public class SettingsActity extends StatusBarActivity {
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 String ipAddr=ipEditText.getText().toString();
                 String portStr=portEditText.getText().toString();
 
-                if(!RegexUtils.isIPAddress(ipAddr)){
-                    showMessage("不合法的ip地址");
+                if(!RegexUtils.isIPAddress(ipAddr)&&!RegexUtils.isDomain(ipAddr)){
+                    showMessage("不合法的ip地址或域名");
                     return;
                 }
                 if(!RegexUtils.isNumber(portStr)){

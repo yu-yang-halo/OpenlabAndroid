@@ -176,7 +176,6 @@ public class MainActivity extends StatusBarActivity {
 			if(s==null){
 				if(userType!=null){
 
-					ContentBox.loadString(MainActivity.this,ContentBox.KEY_REALNAME,userType.getRealName());
 					if(userInfoProtocol!=null){
 						userInfoProtocol.onDataComplete(userType);
 					}
@@ -192,8 +191,7 @@ public class MainActivity extends StatusBarActivity {
 		}
 	}
 
-	private Set<DataCallBackProtocol> dataCallbacks=new HashSet<DataCallBackProtocol>();
-	private UserInfoProtocol userInfoProtocol;
+
 
 	public void setUserInfoProtocol(UserInfoProtocol userInfoProtocol) {
 		this.userInfoProtocol = userInfoProtocol;
@@ -211,5 +209,8 @@ public class MainActivity extends StatusBarActivity {
 	public interface UserInfoProtocol{
 		public void onDataComplete(UserType userType);
 	}
+
+	private Set<DataCallBackProtocol> dataCallbacks=new HashSet<DataCallBackProtocol>();
+	private UserInfoProtocol userInfoProtocol;
 
 }

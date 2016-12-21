@@ -7,6 +7,21 @@ import java.util.regex.Pattern;
  * Created by Administrator on 2015/7/23.
  */
 public class RegexUtils {
+    public static  boolean isDomain(String domain){
+
+        /**
+         * 判断域名
+         */
+        String rexp = "(?=^.{4,253}$)(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\\.)+[a-zA-Z]{2,63}\\.?$)";
+
+        Pattern pat = Pattern.compile(rexp);
+
+        Matcher mat = pat.matcher(domain);
+
+
+        return mat.matches();
+
+    }
     public  static  boolean isIPAddress(String ipaddr){
         /**
          * 判断IP格式和范围
