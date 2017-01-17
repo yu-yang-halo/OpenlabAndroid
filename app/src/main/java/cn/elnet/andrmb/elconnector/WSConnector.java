@@ -1453,6 +1453,10 @@ public class WSConnector {
 				+"&secToken="+secToken
 				+"&userId="+userId+"&password="+ MD5Generator.reverseMD5Value(pwd);
 
+		if(loginName==null){
+			loginName=this.userMap.get("loginName");
+			System.out.println("cache loginname "+loginName);
+		}
 
 
 		if(vcode!=null&&loginName!=null&&phone!=null){
@@ -1474,7 +1478,7 @@ public class WSConnector {
 
 
 
-		Logger.getLogger(this.getClass()).info("createUser URL" + service);
+		Logger.getLogger(this.getClass()).info("updateUser URL" + service);
 		Element root = getXMLNode(service);
 		if (root == null) {
 			throw new WSException(ErrorCode.REJECT);

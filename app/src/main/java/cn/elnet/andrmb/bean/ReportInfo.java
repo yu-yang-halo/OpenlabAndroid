@@ -19,7 +19,7 @@ public class ReportInfo implements Parcelable {
     private String scoreComment;
     private int givenBy;
     private String givenTime;
-    private short status;
+    private short status=-1;
 
     public float getScore() {
         return score;

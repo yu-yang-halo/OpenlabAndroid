@@ -76,11 +76,11 @@ public class RegisterActivity extends StatusBarActivity {
                         ||vcode.trim().equals("")){
                     Toast.makeText(RegisterActivity.this,"内容不能为空",Toast.LENGTH_SHORT).show();
                 }else if(!RegexUtils.isVaildLoginName(name)){
-                    Toast.makeText(RegisterActivity.this,"请输入正确的学生号",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this,"请输入正确的学号或职工号",Toast.LENGTH_SHORT).show();
                 }else if(!RegexUtils.isMobileNO(phone)){
                     Toast.makeText(RegisterActivity.this,"请输入正确的手机号",Toast.LENGTH_SHORT).show();
                 }else if(!RegexUtils.isVaildPass(pass)){
-                    Toast.makeText(RegisterActivity.this,"密码由6-22位的数字、字符组成",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this,"密码由6-20位的字母、数字、下划线组成",Toast.LENGTH_SHORT).show();
                 }else if(!pass.equals(repass)){
                     Toast.makeText(RegisterActivity.this,"两次输入密码不一致",Toast.LENGTH_SHORT).show();
                 }else{

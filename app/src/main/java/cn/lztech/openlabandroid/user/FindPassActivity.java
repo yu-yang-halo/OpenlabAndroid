@@ -138,9 +138,9 @@ public class FindPassActivity extends StatusBarActivity {
                     }else if(!RegexUtils.isMobileNO(phone)){
                         Toast.makeText(FindPassActivity.this,"请输入正确的手机号",Toast.LENGTH_SHORT).show();
                     }else if(!RegexUtils.isVaildLoginName(loginName)){
-                        Toast.makeText(FindPassActivity.this,"请输入正确的学生号",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FindPassActivity.this,"请输入正确的学号或职工号",Toast.LENGTH_SHORT).show();
                     }else if(!RegexUtils.isVaildPass(newpass)){
-                        Toast.makeText(FindPassActivity.this,"密码由6-22位的数字、字符组成",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FindPassActivity.this,"密码由6-20位的字母、数字、下划线组成",Toast.LENGTH_SHORT).show();
                     }else if(!newpass.equals(repass)){
                         Toast.makeText(FindPassActivity.this,"两次输入密码不一致",Toast.LENGTH_SHORT).show();
                     }else{
@@ -153,7 +153,7 @@ public class FindPassActivity extends StatusBarActivity {
                     }
                 }else{
                     if(!RegexUtils.isVaildPass(newpass)){
-                        Toast.makeText(FindPassActivity.this,"密码由6-22位的数字、字符组成",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FindPassActivity.this,"密码由6-20位的字母、数字、下划线组成",Toast.LENGTH_SHORT).show();
                     }else if(!newpass.equals(repass)){
                         Toast.makeText(FindPassActivity.this,"两次输入密码不一致",Toast.LENGTH_SHORT).show();
                     }else{

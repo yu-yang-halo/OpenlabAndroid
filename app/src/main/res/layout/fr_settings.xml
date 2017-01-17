@@ -64,11 +64,24 @@
 
     <ListView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout_marginTop="15dp"
         android:id="@+id/listView2"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/relativeLayout6" />
+
+    <Button
+        android:text="退出当前账户"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/white"
+        android:background="@drawable/button_shape_blue"
+        android:id="@+id/button9" />
 
 
 </RelativeLayout>

@@ -77,7 +77,7 @@ public class RegexUtils {
         /**
          * 判断有效密码格式
          */
-        String rexp="^[@A-Za-z0-9!#$%^&*.~]{6,22}$";
+        String rexp="^[A-Za-z0-9_]{6,20}$";
 
         Pattern p = Pattern.compile(rexp);
         Matcher m = p.matcher(password);
@@ -87,7 +87,7 @@ public class RegexUtils {
         /**
          * 判断登录名是否有效
          */
-        String rexp="^[@A-Za-z0-9!#$%^&*.~]{5,22}$";
+        String rexp="^[@A-Za-z0-9!#$%^&*.~]{4,22}$";
 
         Pattern p = Pattern.compile(rexp);
         Matcher m = p.matcher(name);

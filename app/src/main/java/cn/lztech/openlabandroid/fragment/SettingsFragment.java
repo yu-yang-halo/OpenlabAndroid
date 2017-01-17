@@ -27,6 +27,7 @@ import cn.lztech.openlabandroid.MainActivity;
 import cn.lztech.openlabandroid.R;
 import cn.lztech.openlabandroid.ScoreActivity;
 import cn.lztech.openlabandroid.user.FindPassActivity;
+import cn.lztech.openlabandroid.user.LoginActivity;
 
 /**
  * Created by Administrator on 2016/4/1.
@@ -34,6 +35,8 @@ import cn.lztech.openlabandroid.user.FindPassActivity;
 public class SettingsFragment extends Fragment implements MainActivity.UserInfoProtocol{
     ListView listView;
     Button realNameButton;
+    Button exitBtn;
+
     TextView accountNameTxt;
     TextView phoneTxt;
     MainActivity mainActivity;
@@ -53,6 +56,8 @@ public class SettingsFragment extends Fragment implements MainActivity.UserInfoP
         View view=inflater.inflate(R.layout.fr_settings, null);
         listView= (ListView) view.findViewById(R.id.listView2);
         realNameButton= (Button) view.findViewById(R.id.button4);
+        exitBtn= (Button) view.findViewById(R.id.button9);
+
         accountNameTxt= (TextView) view.findViewById(R.id.textView11);
         phoneTxt= (TextView) view.findViewById(R.id.textView10);
         infoLayout= (RelativeLayout) view.findViewById(R.id.relativeLayout6);
@@ -94,6 +99,14 @@ public class SettingsFragment extends Fragment implements MainActivity.UserInfoP
             }
         });
 
+        exitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getActivity(), LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
 
 
         return view;

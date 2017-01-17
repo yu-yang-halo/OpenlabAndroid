@@ -8,9 +8,9 @@
 
     <color name="gray">#90ffffff</color>
 
-    <color name="theme_color">#3b7fe5</color>
-    <color name="theme_color_alph90">#903b7fe5</color>
-    <color name="theme_color_alphb0">#b03b7fe5</color>
+    <color name="theme_color">#004098</color>
+    <color name="theme_color_alph90">#90004098</color>
+    <color name="theme_color_alphb0">#b0004098</color>
 
     <color name="black_alph30">#80000000</color>
     <color name="black_alph60">#B0000000</color>

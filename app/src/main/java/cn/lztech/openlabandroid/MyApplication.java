@@ -19,6 +19,7 @@ import cn.elnet.andrmb.elconnector.util.IWSErrorCodeListener;
 import cn.jpush.android.api.BasicPushNotificationBuilder;
 import cn.jpush.android.api.CustomPushNotificationBuilder;
 import cn.jpush.android.api.JPushInterface;
+import cn.lztech.openlabandroid.font.FontsOverride;
 import cn.lztech.openlabandroid.user.LoginActivity;
 import im.fir.sdk.FIR;
 
@@ -31,7 +32,6 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         new Thread(new Runnable() {
             @Override
             public void run() {

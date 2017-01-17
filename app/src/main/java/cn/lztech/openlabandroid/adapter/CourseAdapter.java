@@ -157,7 +157,7 @@ public class CourseAdapter extends BaseExpandableListAdapter {
 
         if(report!=null){
             holder.statusView.setText("已上传报告");
-            if(report.getStatus()==1){
+            if(report.getStatus()>=0&&report.getScore()>=0){
                 holder.dueDate.setText("成绩结果已出");
                 holder.assignmentScoreTxt.setText("作业成绩:"+report.getScore());
             }else{
