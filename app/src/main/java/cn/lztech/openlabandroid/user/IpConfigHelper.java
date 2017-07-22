@@ -2,6 +2,7 @@ package cn.lztech.openlabandroid.user;
 
 import android.content.Context;
 
+import cn.elnet.andrmb.elconnector.WSConnector;
 import cn.lztech.openlabandroid.cache.ContentBox;
 
 /**
@@ -10,7 +11,7 @@ import cn.lztech.openlabandroid.cache.ContentBox;
 
 public class IpConfigHelper {
     public static String[] fetchIpAddrPortArr(Context ctx){
-        String ipAddrStr= ContentBox.getValueString(ctx,ContentBox.KEY_IP,"202.38.78.70");
+        String ipAddrStr= ContentBox.getValueString(ctx,ContentBox.KEY_IP, WSConnector.IP1);
         String portStr=ContentBox.getValueString(ctx,ContentBox.KEY_PORT,"8080");
         return new String[]{ipAddrStr,portStr};
     }

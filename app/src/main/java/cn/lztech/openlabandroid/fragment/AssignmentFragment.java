@@ -166,7 +166,7 @@ public class AssignmentFragment extends Fragment {
 
     public void beginAssignmentRefresh(){
         if(selectedSemester!=null&&selectedYear!=null){
-            new AssignmentTask(null,-1).execute();
+            new AssignmentTask(-1,-1).execute();
         }else{
             Toast.makeText(getActivity(),"请选择学年学期",Toast.LENGTH_SHORT).show();
             swipeRefreshLayout.setRefreshing(false);
@@ -184,7 +184,7 @@ public class AssignmentFragment extends Fragment {
 
         if(selectedSemester!=null&&selectedYear!=null){
             Log.v("Expand Group Index","Expand g:"+groupChildIndex[0]+" c:"+groupChildIndex[1]);
-            new AssignmentTask(courseTypes.get(groupChildIndex[0]).getCourseCode(),groupChildIndex[0]).execute();
+            new AssignmentTask(courseTypes.get(groupChildIndex[0]).getCourseId(),groupChildIndex[0]).execute();
         }else{
             Toast.makeText(getActivity(),"请选择学年学期",Toast.LENGTH_SHORT).show();
         }
@@ -265,10 +265,10 @@ public class AssignmentFragment extends Fragment {
 
 
 
-    private  void initAdapter(String courseCode,int groupIndex){
+    private  void initAdapter(int  courseId,int groupIndex){
 
-        if(courseAdapter!=null&&courseCode!=null){
-            Log.v("initAdapter","courseCode : "+courseCode+"; groupIndex: "+groupIndex);
+        if(courseAdapter!=null&&courseId>0){
+            Log.v("initAdapter","courseId : "+courseId+"; groupIndex: "+groupIndex);
             courseAdapter.setCourseTypes(courseTypes);
             if(groupIndex>=0){
                 assignmentListView.expandGroup(groupIndex);
@@ -288,7 +288,7 @@ public class AssignmentFragment extends Fragment {
                         +groupPosition
                         +" isExpand "+parent.isGroupExpanded(groupPosition));
                 if(!parent.isGroupExpanded(groupPosition)){
-                    new AssignmentTask(courseTypes.get(groupPosition).getCourseCode(),-1).execute();
+                    new AssignmentTask(courseTypes.get(groupPosition).getCourseId(),-1).execute();
                 }
 
                 return false;
@@ -301,7 +301,7 @@ public class AssignmentFragment extends Fragment {
                 groupChildIndex[0]=groupPosition;
                 groupChildIndex[1]=childPosition;
 
-                String courseCode=courseTypes.get(groupPosition).getCourseCode();
+                int courseId=courseTypes.get(groupPosition).getCourseId();
 
                 AssignmentType assignmentType=courseTypes.get(groupPosition).getAssignmentTypes().get(childPosition);
 
@@ -319,12 +319,12 @@ public class AssignmentFragment extends Fragment {
                     return false;
                 }
 
-                Log.v("assignmentListView","courseCode "+courseCode+" : "+assignmentId+" reportInfos:"+reportInfos);
+                Log.v("assignmentListView","courseId "+courseId+" : "+assignmentId+" reportInfos:"+reportInfos);
 
 
                 Intent intent=new Intent(getActivity(),UploadAssignmentActivity.class);
                 intent.putExtra(UploadAssignmentActivity.BUNDLE_KEY_ASSIGNMENTID,assignmentId);
-                intent.putExtra(UploadAssignmentActivity.BUNDLE_KEY_COURSECODE,courseCode);
+                intent.putExtra(UploadAssignmentActivity.BUNDLE_KEY_COURSEID,courseId);
                 intent.putExtra(UploadAssignmentActivity.BUNDLE_KEY_TITLE,courseTypes.get(groupPosition)
                                                                                      .getAssignmentTypes()
                                                                                      .get(childPosition)
@@ -364,13 +364,13 @@ public class AssignmentFragment extends Fragment {
     /**
      * 判断课程是否需要重新网络加载
      * 节省服务端请求流量
-     * @param courseCode
+     * @param courseId
      * @return
      */
-    boolean isNeedReloadAssignment(String courseCode){
+    boolean isNeedReloadAssignment(int courseId){
         boolean isNeedReload=true;
         for (int i=0;i<courseTypes.size();i++){
-            if(courseTypes.get(i).getCourseCode().equals(courseCode)){
+            if(courseTypes.get(i).getCourseId()==courseId){
                 if(courseTypes.get(i).getAssignmentTypes()!=null){
                     isNeedReload=false;
                 }
@@ -383,10 +383,10 @@ public class AssignmentFragment extends Fragment {
     }
 
     class AssignmentTask extends AsyncTask<String,String,String>{
-        String courseCode;
+        int courseId;
         int groupIndex;
-        AssignmentTask(String courseCode,int groupIndex){
-            this.courseCode=courseCode;
+        AssignmentTask(int courseId,int groupIndex){
+            this.courseId=courseId;
             this.groupIndex=groupIndex;
         }
 
@@ -398,13 +398,12 @@ public class AssignmentFragment extends Fragment {
 
                 serverDate=TimeUtils.getServerTime();
 
-
-                if(courseCode==null){
+                if(courseId<=0){
                     courseTypes=WSConnector.getInstance().getLabCourseList(selectedYear,selectedSemester);
                 }else{
-                    if(isNeedReloadAssignment(courseCode)||groupIndex>=0){
-                        assignmentReportTurple=WSConnector.getInstance().getAassignmentList(courseCode);
-                        ScoreType scoreType=WSConnector.getInstance().getStudentScoreList(courseCode);
+                    if(isNeedReloadAssignment(courseId)||groupIndex>=0){
+                        assignmentReportTurple=WSConnector.getInstance().getAassignmentList(courseId);
+                        ScoreType scoreType=WSConnector.getInstance().getStudentScoreList(courseId);
 
                         // assignmentReportTurple.setScoreType(scoreType);
 
@@ -412,7 +411,7 @@ public class AssignmentFragment extends Fragment {
                         reportInfos=assignmentReportTurple.getReportInfoList();
 
                         for (int i=0;i<courseTypes.size();i++){
-                            if(courseTypes.get(i).getCourseCode().equals(courseCode)){
+                            if(courseTypes.get(i).getCourseId()==courseId){
                                 courseTypes.get(i).setAssignmentTypes(assignmentTypes);
                                 courseTypes.get(i).setReportInfos(reportInfos);
                                 courseTypes.get(i).setScoreType(scoreType);
@@ -433,7 +432,7 @@ public class AssignmentFragment extends Fragment {
             super.onPostExecute(s);
 
 
-            initAdapter(courseCode,groupIndex);
+            initAdapter(courseId,groupIndex);
 
             swipeRefreshLayout.setRefreshing(false);
 

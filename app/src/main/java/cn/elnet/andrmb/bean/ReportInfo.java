@@ -10,7 +10,7 @@ public class ReportInfo implements Parcelable {
     private int reportId;
     private int userId;
     private int assignmentId;
-    private String courseCode;
+    private int courseId;
     private String description;
     private String fileName;
     private String submitTime;
@@ -85,12 +85,12 @@ public class ReportInfo implements Parcelable {
         this.assignmentId = assignmentId;
     }
 
-    public String getCourseCode() {
-        return courseCode;
+    public int getCourseId() {
+        return courseId;
     }
 
-    public void setCourseCode(String courseCode) {
-        this.courseCode = courseCode;
+    public void setCourseId(int courseCode) {
+        this.courseId = courseId;
     }
 
     public String getDescription() {
@@ -118,14 +118,14 @@ public class ReportInfo implements Parcelable {
     }
 
 
-    public ReportInfo(int reportId, int userId, int assignmentId, String courseCode,
+    public ReportInfo(int reportId, int userId, int assignmentId, int courseId,
                       String description, String fileName,
                       String submitTime,float score,String scoreComment,int givenBy,
                       String givenTime,short status) {
         this.reportId = reportId;
         this.userId = userId;
         this.assignmentId = assignmentId;
-        this.courseCode = courseCode;
+        this.courseId = courseId;
         this.description = description;
         this.fileName = fileName;
         this.submitTime = submitTime;
@@ -155,7 +155,7 @@ public class ReportInfo implements Parcelable {
             result.userId = source.readInt();
             result.assignmentId = source.readInt();
 
-            result.courseCode = source.readString();
+            result.courseId = source.readInt();
             result.description = source.readString();
             result.fileName = source.readString();
             result.submitTime = source.readString();
@@ -182,7 +182,7 @@ public class ReportInfo implements Parcelable {
                 "reportId=" + reportId +
                 ", userId=" + userId +
                 ", assignmentId=" + assignmentId +
-                ", courseCode='" + courseCode + '\'' +
+                ", courseId='" + courseId + '\'' +
                 ", description='" + description + '\'' +
                 ", fileName='" + fileName + '\'' +
                 ", submitTime='" + submitTime + '\'' +
@@ -194,7 +194,7 @@ public class ReportInfo implements Parcelable {
         dest.writeInt(reportId);
         dest.writeInt(userId);
         dest.writeInt(assignmentId);
-        dest.writeString(courseCode);
+        dest.writeInt(courseId);
         dest.writeString(description);
         dest.writeString(fileName);
         dest.writeString(submitTime);

@@ -79,7 +79,7 @@ import javax.xml.parsers.ParserConfigurationException;
 public class WSConnector {
 	private static String openlabUrl = "";
 	private static String authapiUrl = "";
-	private static String IP1 = "202.38.78.70";//202.38.78.70
+	public static String IP1 = "etcis.ustc.edu.cn";//202.38.78.70  etcis.ustc.edu.cn
 	private static String portStr = "8080";
 	private static final String REQUEST_HEAD = "http://";
 	private static WSConnector instance = new WSConnector();
@@ -674,6 +674,8 @@ public class WSConnector {
 								.getElementsByTagName("semester").item(0);
 						Element yearNode = (Element) child
 								.getElementsByTagName("year").item(0);
+						Element courseIdNode = (Element) child
+								.getElementsByTagName("courseId").item(0);
 
 						String name = nameNode.getFirstChild() == null ? ""
 								: nameNode.getFirstChild().getNodeValue();
@@ -681,8 +683,10 @@ public class WSConnector {
 								: courseCodeNode.getFirstChild().getNodeValue();
 						int  semester = Integer.parseInt(semesterNode.getFirstChild().getNodeValue());
 						int  year = Integer.parseInt(yearNode.getFirstChild().getNodeValue());
+						int  courseId = Integer.parseInt(courseIdNode.getFirstChild().getNodeValue());
 
-						CourseType courseType=new CourseType(courseCode,
+
+						CourseType courseType=new CourseType(courseId,courseCode,
 								             name,"",year,
 								             CourseType.Semester.value(semester),
 								             null);
@@ -765,12 +769,12 @@ public class WSConnector {
 	/**
 	 * 更新作业
 	 */
-	public int AddOrUpdAssignment(int asId, String courseCode, String desc,
+	public int AddOrUpdAssignment(int asId, int courseId, String desc,
 			String dueDate) throws WSException {
 		String service = WSConnector.openlabUrl
 				+ "AddOrUpdAssignment?senderId=" + this.userMap.get("userId")
 				+ "&secToken=" + this.userMap.get("secToken") + "&asId=" + asId
-				+ "&courseCode=" + courseCode + "&desc=" + desc;
+				+ "&courseId=" + courseId + "&desc=" + desc;
 		if (dueDate != null) {
 			service += "&dueDate=" + dueDate;
 		}
@@ -871,7 +875,7 @@ public class WSConnector {
 
 
 
-	public int submitReport(String courseCode, String file, String desc,
+	public int submitReport(int courseId, String file, String desc,
 			int assignmentId) throws WSException, UnsupportedEncodingException {
 		String service = WSConnector.openlabUrl + "submitReport";
 		StringBuffer params=new StringBuffer();
@@ -881,7 +885,7 @@ public class WSConnector {
 		params.append("&assignmentId=" + assignmentId);
 		params.append("&senderId=" + this.userMap.get("userId"));
 		params.append("&secToken="+ this.userMap.get("secToken"));
-		params.append("&courseCode=" + courseCode);
+		params.append("&courseId=" + courseId);
 		params.append("&file=" + URLEncoder.encode(file,"utf-8"));
 
 
@@ -921,12 +925,12 @@ public class WSConnector {
 
 	}
 
-	public ScoreType getStudentScoreList(String courseCode) throws WSException {
+	public ScoreType getStudentScoreList(int courseId) throws WSException {
 		String service = WSConnector.openlabUrl
 				+ "getStudentScoreList?senderId=" + this.userMap.get("userId")
 				+ "&secToken=" + this.userMap.get("secToken")
 				+ "&userId=" + this.userMap.get("userId")
-				+ "&courseCode="+courseCode;
+				+ "&courseId="+courseId;
 
 		int userId=this.userMap.get("userId")==null?-1:Integer.parseInt(this.userMap.get("userId"));
 
@@ -956,6 +960,8 @@ public class WSConnector {
 						Element child = (Element) scoreListNodes.item(i);
 						Element studentIdNode = (Element) child
 								.getElementsByTagName("studentId").item(0);
+						Element courseIdNode = (Element) child
+								.getElementsByTagName("courseId").item(0);
 						Element courseCodeNode = (Element) child
 								.getElementsByTagName("courseCode").item(0);
 						Element scoreNode = (Element) child
@@ -966,16 +972,18 @@ public class WSConnector {
 								.getElementsByTagName("status").item(0);
 
 
-
 						int studentId=parseElementValueToInt(studentIdNode);
+						int _courseId=parseElementValueToInt(courseIdNode);
+
 						if(userId!=studentId){
 							continue;
 						}
 						String comment=parseElementValueNoNull(commentNode);
+						String courseCode=parseElementValueNoNull(courseCodeNode);
 						short status=parseElementValueToShort(statusNode);
 						float score=parseElementValueToFloat(scoreNode);
 
-						ScoreType scoreType=new ScoreType(studentId,courseCode,score, comment,status);
+						ScoreType scoreType=new ScoreType(studentId,_courseId,courseCode,score, comment,status);
 
 						scoreList.add(scoreType);
 
@@ -1097,14 +1105,14 @@ public class WSConnector {
 
 
 
-	public AssignmentReportTurple getAassignmentList(String courseCode)
+	public AssignmentReportTurple getAassignmentList(int courseId)
 			throws WSException {
 		AssignmentReportTurple turple=new AssignmentReportTurple();
 		String service = WSConnector.openlabUrl
 				+ "getAassignmentList?senderId=" + this.userMap.get("userId")
 				+ "&secToken=" + this.userMap.get("secToken")+"&userId="+this.userMap.get("userId");
-		if (courseCode != null) {
-			service += "&courseCode=" + courseCode;
+		if (courseId >=0) {
+			service += "&courseId=" + courseId;
 		}
 
 		Logger.getLogger(this.getClass()).info(
@@ -1137,6 +1145,8 @@ public class WSConnector {
 						Element child = (Element) assignmentListNodes.item(i);
 						Element idNode = (Element) child.getElementsByTagName(
 								"id").item(0);
+						Element courseIdNode = (Element) child.getElementsByTagName(
+								"courseId").item(0);
 						Element courseCodeNode = (Element) child
 								.getElementsByTagName("courseCode").item(0);
 						Element descNode = (Element) child
@@ -1155,14 +1165,16 @@ public class WSConnector {
 						int createdBy = Integer.parseInt(createdByNode
 								.getFirstChild().getNodeValue());
 
-						courseCode = courseCodeNode.getFirstChild()
-								.getNodeValue();
+						courseId = parseElementValueToInt(courseIdNode);
+
+						String courseCode=parseElementValueNoNull(courseCodeNode);
+
 						String desc = descNode.getFirstChild().getNodeValue();
 						String dueDate = dueDateNode.getFirstChild()
 								.getNodeValue();
 						String createdTime = createdTimeNode.getFirstChild()
 								.getNodeValue();
-						AssignmentType assignmentType = new AssignmentType(id,
+						AssignmentType assignmentType = new AssignmentType(id,courseId,
 								courseCode, desc, dueDate, createdTime,
 								createdBy);
 
@@ -1178,8 +1190,8 @@ public class WSConnector {
 						Element child = (Element) reportListNodes.item(i);
 						Element reportIdNode = (Element) child.getElementsByTagName(
 								"reportId").item(0);
-						Element courseCodeNode = (Element) child
-								.getElementsByTagName("courseCode").item(0);
+						Element courseIdNode = (Element) child
+								.getElementsByTagName("courseId").item(0);
 						Element descriptionNode = (Element) child
 								.getElementsByTagName("description").item(0);
 						Element userIdNode = (Element) child
@@ -1207,7 +1219,7 @@ public class WSConnector {
 						int reportId = parseElementValueToInt(reportIdNode);
 						int userId =parseElementValueToInt(userIdNode);
 						int assignmentId = parseElementValueToInt(assignmentIdNode);
-						courseCode =parseElementValueNoNull(courseCodeNode);
+						courseId =parseElementValueToInt(courseIdNode);
 
 
 
@@ -1230,7 +1242,7 @@ public class WSConnector {
 
 
 
-						ReportInfo reportInfo=new ReportInfo(reportId,userId,assignmentId,courseCode,
+						ReportInfo reportInfo=new ReportInfo(reportId,userId,assignmentId,courseId,
 								description,fileName,submitTime,score,scoreComment,givenBy,
 						givenTime,status);
 

@@ -53,7 +53,7 @@ import me.iwf.photopicker.utils.PhotoPickerIntent;
  * Created by Administrator on 2016/5/19.
  */
 public class UploadAssignmentActivity extends StatusBarActivity {
-    public static final  String BUNDLE_KEY_COURSECODE="bundle_key_coursecode";
+    public static final  String BUNDLE_KEY_COURSEID="bundle_key_courseId";
     public static final  String BUNDLE_KEY_ASSIGNMENTID="bundle_key_assignmentId";
     public static final  String BUNDLE_KEY_TITLE="bundle_key_title";
     public static final  String BUNDLE_KEY_REPORTINFO="bundle_key_report_info";
@@ -78,7 +78,7 @@ public class UploadAssignmentActivity extends StatusBarActivity {
     MyGridViewAdapter myGridViewAdapter;
 
     private String title;
-    private String courseCode;
+    private int  courseId;
     private int assignmentId;
     private Uri tmpCaptureUri;
     ReportInfo reportInfo;
@@ -103,12 +103,12 @@ public class UploadAssignmentActivity extends StatusBarActivity {
         descriptionTV= (EditText) findViewById(R.id.descriptionTV);
 
 
-        courseCode=getIntent().getStringExtra(BUNDLE_KEY_COURSECODE);
+        courseId=getIntent().getIntExtra(BUNDLE_KEY_COURSEID,0);
         assignmentId=getIntent().getIntExtra(BUNDLE_KEY_ASSIGNMENTID,0);
 
         List<ReportInfo> tmps=getIntent().getParcelableArrayListExtra(BUNDLE_KEY_REPORTINFO);
         String fileName=filterAssignmentReport(tmps);
-        Log.v("ActivityLOG","courseCode "+courseCode+" : "+assignmentId+" reportInfo::"+reportInfo);
+        Log.v("ActivityLOG","courseId "+courseId+" : "+assignmentId+" reportInfo::"+reportInfo);
 
         /**初始化Add图标**/
         initAddPicture();
@@ -416,7 +416,7 @@ public class UploadAssignmentActivity extends StatusBarActivity {
                 String base64CodeString=ImageUtils.fileToString(reImage.getPath());
                 // System.out.println("base64CodeString:::"+base64CodeString);
                 try {
-                    WSConnector.getInstance().submitReport(courseCode,base64CodeString,desc,assignmentId);
+                    WSConnector.getInstance().submitReport(courseId,base64CodeString,desc,assignmentId);
                 } catch (WSException e) {
                     e.printStackTrace();
                     isUploadSuccess=false;

@@ -160,7 +160,7 @@ public class ScoreActivity extends StatusBarActivity {
                 }
                 for (CourseType courseType:courseTypes){
 
-                    ScoreType scoreType=WSConnector.getInstance().getStudentScoreList(courseType.getCourseCode());
+                    ScoreType scoreType=WSConnector.getInstance().getStudentScoreList(courseType.getCourseId());
                     if(scoreType==null){
                         continue;
                     }

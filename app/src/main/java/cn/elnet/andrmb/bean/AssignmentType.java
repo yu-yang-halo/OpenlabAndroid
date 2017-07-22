@@ -2,6 +2,7 @@ package cn.elnet.andrmb.bean;
 
 public class AssignmentType {
 	private int id;
+	private int courseId;
 	private String courseCode;
 	private String desc;
 	private String dueDate;
@@ -43,10 +44,20 @@ public class AssignmentType {
 	public void setCreatedBy(int createdBy) {
 		this.createdBy = createdBy;
 	}
-	public AssignmentType(int id, String courseCode, String desc,
-			String dueDate, String createdTime, int createdBy) {
+
+	public int getCourseId() {
+		return courseId;
+	}
+
+	public void setCourseId(int courseId) {
+		this.courseId = courseId;
+	}
+
+	public AssignmentType(int id,int courseId, String courseCode, String desc,
+						  String dueDate, String createdTime, int createdBy) {
 		super();
 		this.id = id;
+		this.courseId=courseId;
 		this.courseCode = courseCode;
 		this.desc = desc;
 		this.dueDate = dueDate;

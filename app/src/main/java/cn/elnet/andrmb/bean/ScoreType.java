@@ -5,8 +5,9 @@ package cn.elnet.andrmb.bean;
  */
 
 public class ScoreType {
-    public ScoreType(int studentId, String courseCode, float score, String comment, short status) {
+    public ScoreType(int studentId,int courseId,String courseCode, float score, String comment, short status) {
         this.studentId = studentId;
+        this.courseId=courseId;
         this.courseCode = courseCode;
         this.score = score;
         this.comment = comment;
@@ -23,6 +24,7 @@ public class ScoreType {
 
 
     private int studentId;
+    private int courseId;
     private String courseCode;
     private float score;
     private String comment;
@@ -72,6 +74,14 @@ public class ScoreType {
 
     public short getStatus() {
         return status;
+    }
+
+    public int getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
     }
 
     @Override

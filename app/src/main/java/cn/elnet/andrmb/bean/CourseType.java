@@ -40,6 +40,7 @@ public class CourseType {
 
     }
 
+    private int courseId;
     private String courseCode;
     private String name;
     private String desc;
@@ -107,13 +108,22 @@ public class CourseType {
         this.year = year;
     }
 
-    public CourseType(String courseCode, String name, String desc, int year, Semester semester, List<AssignmentType> assignmentTypes) {
+    public CourseType(int courseId,String courseCode, String name, String desc, int year, Semester semester, List<AssignmentType> assignmentTypes) {
+        this.courseId=courseId;
         this.courseCode = courseCode;
         this.name = name;
         this.desc = desc;
         this.year = year;
         this.semester = semester;
         this.assignmentTypes = assignmentTypes;
+    }
+
+    public int getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
     }
 
     public List<ReportInfo> getReportInfos() {
